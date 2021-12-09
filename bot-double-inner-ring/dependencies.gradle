@@ -5,7 +5,7 @@ project.ext.versions = [
         lombok     : '1.18.10',
         osmapi_map : '2.0',
         sl4j       : '1.7.30',
-        spring_boot: '2.5.5',
+        spring_boot: "${SPRING_BOOT_VERSION}",
         failsafe   : '2.4.4',
 
         // 3PP TEST
@@ -26,8 +26,9 @@ project.ext.packages = [
         sl4j      : "org.slf4j:slf4j-api:${versions.sl4j}",
         spring    : [
                 boot: [
-                        starter     : "org.springframework.boot:spring-boot-starter:${versions.spring_boot}",
-                        starter_test: "org.springframework.boot:spring-boot-starter-test:${versions.spring_boot}"
+                        starter           : "org.springframework.boot:spring-boot-starter:${versions.spring_boot}",
+                        starter_test      : "org.springframework.boot:spring-boot-starter-test:${versions.spring_boot}",
+                        starter_validation: "org.springframework.boot:spring-boot-starter-validation:${versions.spring_boot}"
                 ]
         ],
         failsafe  : "net.jodah:failsafe:${versions.failsafe}",
