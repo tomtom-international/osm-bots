@@ -1,0 +1,3 @@
+rootProject.name = 'osm-bots'
+
+include 'bot-double-inner-ring'

@@ -1,0 +1,30 @@
+[
+  {
+    "lat": 47.1648973,
+    "lon": -69.2862815,
+    "id": "0947b625-183a-dccd-7593-c8f0222e83ec",
+    "item": "1170",
+    "source": 10509,
+    "class": 1,
+    "subtitle": null,
+    "title": {
+      "auto": "Double inner polygon"
+    },
+    "level": 3,
+    "update": "2021-11-15 21:21:27+00:00",
+    "usernames": [
+      "",
+      "",
+      ""
+    ],
+    "osm_ids": {
+      "relations": [
+        111
+      ],
+      "ways": [
+        222,
+        333
+      ]
+    }
+  }
+]

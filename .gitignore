@@ -1,2 +1,18 @@
 .venv
 features.csv
+
+### Gradle ###
+.gradle
+!gradle/wrapper/gradle-wrapper.jar
+
+### IntelliJ IDEA ###
+.idea
+build/
+out/
+*.iws
+*.iml
+*.ipr
+
+### Log file ###
+*.log
+*.log.gz

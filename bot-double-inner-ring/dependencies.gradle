@@ -1,0 +1,49 @@
+project.ext.versions = [
+        // 3PP SOURCE
+        jackson    : '2.13.0',
+        logback    : '1.2.3',
+        lombok     : '1.18.10',
+        osmapi_map : '2.0',
+        sl4j       : '1.7.30',
+        spring_boot: '2.5.5',
+        failsafe   : '2.4.4',
+
+        // 3PP TEST
+        assertj    : '3.19.0',
+        junit      : '5.4.2',
+        mockito    : '3.3.3',
+]
+
+project.ext.packages = [
+        // 3PP SOURCE
+        jackson   : "com.fasterxml.jackson.core:jackson-databind:${versions.jackson}",
+        logback   : [
+                classic: "ch.qos.logback:logback-classic:${versions.logback}",
+                core   : "ch.qos.logback:logback-core:${versions.logback}"
+        ],
+        lombok    : "org.projectlombok:lombok:${versions.lombok}",
+        osmapi_map: "de.westnordost:osmapi-map:${versions.osmapi_map}",
+        sl4j      : "org.slf4j:slf4j-api:${versions.sl4j}",
+        spring    : [
+                boot: [
+                        starter     : "org.springframework.boot:spring-boot-starter:${versions.spring_boot}",
+                        starter_test: "org.springframework.boot:spring-boot-starter-test:${versions.spring_boot}"
+                ]
+        ],
+        failsafe  : "net.jodah:failsafe:${versions.failsafe}",
+
+        // 3PP TEST
+        assertj   : "org.assertj:assertj-core:${versions.assertj}",
+        junit     : [
+                jupiter: [
+                        api   : "org.junit.jupiter:junit-jupiter-api:${versions.junit}",
+                        engine: "org.junit.jupiter:junit-jupiter-engine:${versions.junit}"
+                ],
+                params : "org.junit.jupiter:junit-jupiter-params:${versions.junit}"
+        ],
+        mockito   : [
+                core         : "org.mockito:mockito-core:${versions.mockito}",
+                inline       : "org.mockito:mockito-inline:${versions.mockito}",
+                junit_jupiter: "org.mockito:mockito-junit-jupiter:${versions.mockito}"
+        ]
+]
