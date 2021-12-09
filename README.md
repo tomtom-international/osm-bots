@@ -6,4 +6,4 @@ Code is organized into directories descrbing areas the bot operates on.
 
 ## Bot related pages
 ### Poland
-- [remove_conditional_maxspeed.py](https://wiki.openstreetmap.org/wiki/Automated_edits/TTmechanicalupdates/Remove_night_time_conditional_speed_restriction_in_urban_areas_in_Poland)
+- [remove_conditional_maxspeed.py](https://wiki.openstreetmap.org/wiki/Automated_edits/TTmechanicalupdates/Remove_night_time_conditional_speed_restriction_in_urban_areas_in_Poland) - Removes night time speed limit set to 60 km/h. The speed limit is no longer valid after recent traffic regulations change.
