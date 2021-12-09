@@ -47,6 +47,17 @@ day_and_night_value_regex = re.compile(r"^50\s*@\s*\(0?5:00-23:00\)[;\s]+60\s*@\
 night_and_day_value_regex = re.compile(r"^60\s*@\s*\(23:00-0?5:00\)[;\s]+50\s*@\s*\(0?5:00-23:00\)$")
 
 
+def replace_day_and_night_conditional_with_simple_tag(tags, conditional_tag):
+    if conditional_tag not in tags.keys():
+        return
+    simple_tag = conditional_tag[:-12]
+    if simple_tag not in tags.keys() \
+            and (day_and_night_value_regex.match(tags.get(conditional_tag))
+                 or night_and_day_value_regex.match(tags.get(conditional_tag))):
+        tags.pop(conditional_tag, None)
+        tags[simple_tag] = "50"
+
+
 def remove_listed_tags(tags, tags_to_remove_list):
     for key in tags_to_remove_list:
         if tags.get(key) is None:
@@ -69,6 +80,9 @@ def edit_element(tags):
     if tags.get('maxspeed:backward') == "50":
         remove_listed_tags(tags, tags_to_remove_backward)
 
+    for conditional_tag in tags_to_remove:
+        replace_day_and_night_conditional_with_simple_tag(tags, conditional_tag)
+
     return tags
 
 
@@ -83,7 +97,7 @@ def main():
         max_count_of_elements_in_one_changeset=500,
         objects_to_consider_query="""
 [out:xml][timeout:25000];
-area["name"="powiat pabianicki"]->.searchArea;
+area["name"="Polska"]->.searchArea;
 (
   wr(area.searchArea)[~"^maxspeed.*conditional$"~"60.*@.*(23:00-0?5:00)"];
   wr(area.searchArea)[~"^maxspeed.*conditional$"~"50.*@.*(0?5:00-23:00)"];
@@ -94,7 +108,7 @@ out body;
 out skel qt;
 """,
         objects_to_consider_query_storage_file='conditional_maxspeed.osm',
-        is_in_manual_mode=True,
+        is_in_manual_mode=False,
         changeset_comment='Usuwanie ograniczenia do 60 km/h w godzinach nocnych w obszarze zabudowanym.',
         discussion_url='https://forum.openstreetmap.org/viewtopic.php?id=73116',
         osm_wiki_documentation_page='https://wiki.openstreetmap.org/wiki/Automated_edits/TTmechanicalupdates/Remove_night_time_conditional_speed_restriction_in_urban_areas_in_Poland',
