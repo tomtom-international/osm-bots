@@ -1,4 +1,4 @@
-#    remove_conditional_maxspeed.py - Remove ceratin maxspeed tagging from OSM data in Poland
+#    remove_conditional_maxspeed.py - Remove certain maxspeed tagging from OSM data in Poland
 #    Copyright (C) 2021 TomTom International B.V.
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -18,40 +18,37 @@ import re
 from osm_bot_abstraction_layer.generic_bot_retagging import run_simple_retagging_task
 
 
-tags_to_remove = [
-    "maxspeed:conditional",
-    "maxspeed:backward:conditional",
-    "maxspeed:bus:backward:conditional",
-    "maxspeed:bus:conditional",
+tags_to_remove_forward = [
     "maxspeed:bus:forward:conditional",
     "maxspeed:forward:conditional",
-    "maxspeed:hgv:backward:conditional",
-    "maxspeed:hgv:conditional",
     "maxspeed:hgv:forward:conditional",
-    "maxspeed:trailer:backward:conditional",
-    "maxspeed:trailer:conditional",
     "maxspeed:trailer:forward:conditional",
 ]
 
-tags_to_update = [
-    "maxspeed:bus",
-    "maxspeed:bus:forward",
-    "maxspeed:bus:backward",
-    "maxspeed:trailer",
-    "maxspeed:trailer:forward",
-    "maxspeed:trailer:backward",
+tags_to_remove_backward = [
+    "maxspeed:backward:conditional",
+    "maxspeed:bus:backward:conditional",
+    "maxspeed:hgv:backward:conditional",
+    "maxspeed:trailer:backward:conditional",
 ]
 
+tags_to_remove_both_ways = [
+    "maxspeed:conditional",
+    "maxspeed:bus:conditional",
+    "maxspeed:hgv:conditional",
+    "maxspeed:trailer:conditional",
+]
 
-def edit_element(tags):
-    """Make changes to element tagging."""
-    if tags.get('maxspeed') != ("50"):
-        return tags
-    nigth_value_regex = re.compile(r"^60\s*@\s*\(23:00-0?5:00\)$")
-    day_value_regex = re.compile(r"^50\s*@\s*\(0?5:00-23:00\)$")
-    day_and_night_value_regex = re.compile(r"^50\s*@\s*\(0?5:00-23:00\)[;\s]+60\s*@\s*\(23:00-0?5:00\)$")
-    night_and_day_value_regex = re.compile(r"^60\s*@\s*\(23:00-0?5:00\)[;\s]+50\s*@\s*\(0?5:00-23:00\)$")
-    for key in tags_to_remove:
+tags_to_remove = tags_to_remove_forward + tags_to_remove_backward + tags_to_remove_both_ways
+
+nigth_value_regex = re.compile(r"^60\s*@\s*\(23:00-0?5:00\)$")
+day_value_regex = re.compile(r"^50\s*@\s*\(0?5:00-23:00\)$")
+day_and_night_value_regex = re.compile(r"^50\s*@\s*\(0?5:00-23:00\)[;\s]+60\s*@\s*\(23:00-0?5:00\)$")
+night_and_day_value_regex = re.compile(r"^60\s*@\s*\(23:00-0?5:00\)[;\s]+50\s*@\s*\(0?5:00-23:00\)$")
+
+
+def remove_listed_tags(tags, tags_to_remove_list):
+    for key in tags_to_remove_list:
         if tags.get(key) is None:
             continue
         logging.debug("Key %s, value: '%s'", key, tags.get(key))
@@ -61,6 +58,16 @@ def edit_element(tags):
                 or day_and_night_value_regex.match(tags.get(key))
                 or night_and_day_value_regex.match(tags.get(key))):
             tags.pop(key, None)
+
+
+def edit_element(tags):
+    """Make changes to element tagging."""
+    if tags.get('maxspeed') == "50":
+        remove_listed_tags(tags, tags_to_remove)
+    if tags.get('maxspeed:forward') == "50":
+        remove_listed_tags(tags, tags_to_remove_forward)
+    if tags.get('maxspeed:backward') == "50":
+        remove_listed_tags(tags, tags_to_remove_backward)
 
     return tags
 
@@ -81,7 +88,7 @@ area["name"="powiat pabianicki"]->.searchArea;
   wr(area.searchArea)[~"^maxspeed.*conditional$"~"60.*@.*(23:00-0?5:00)"];
   wr(area.searchArea)[~"^maxspeed.*conditional$"~"50.*@.*(0?5:00-23:00)"];
 ) -> .contitionals;
-wr.contitionals[maxspeed];
+wr.contitionals[~"^maxspeed(:forward|:backward)?$"~"."];
 out body;
 >;
 out skel qt;
