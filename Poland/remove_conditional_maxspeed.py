@@ -89,7 +89,7 @@ out skel qt;
         objects_to_consider_query_storage_file='conditional_maxspeed.osm',
         is_in_manual_mode=True,
         changeset_comment='Usuwanie ograniczenia do 60 km/h w godzinach nocnych w obszarze zabudowanym.',
-        discussion_url='https://forum.openstreetmap.org/viewtopic.php?id=66038',
+        discussion_url='https://forum.openstreetmap.org/viewtopic.php?id=73116',
         osm_wiki_documentation_page='https://wiki.openstreetmap.org/wiki/Automated_edits/TTmechanicalupdates/Remove_night_time_conditional_speed_restriction_in_urban_areas_in_Poland',
         edit_element_function=edit_element,
     )
