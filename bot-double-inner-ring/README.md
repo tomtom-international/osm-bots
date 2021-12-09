@@ -77,8 +77,8 @@ Detailed instruction how to receive those parameters can be found on [OSM wiki p
 
 Parameters `token` and `token-secret` are issued to the consumer by the service provider once the consumer completes the authorization. 
 The `token` defines the access rights of the consumer to the resources and is included in each API request.
-Procedure how to obtain `token` and `token-secret` is described in the method [shouldRetrieveConsumerTokenAndSecret](src/test/java/osm/bots/innerringbot/utils/UserAuthorizationTest.java).
-There is also second method [shouldCheckIfTokenAndTokenSecretWorks](src/test/java/osm/bots/innerringbot/utils/UserAuthorizationTest.java) which can be used 
+Procedure how to obtain `token` and `token-secret` is described in the method [shouldRetrieveConsumerTokenAndSecret](src/test/java/osm/bots/rings/inner/duplicates/utils/UserAuthorizationTest.java).
+There is also second method [shouldCheckIfTokenAndTokenSecretWorks](src/test/java/osm/bots/rings/inner/duplicates/utils/UserAuthorizationTest.java) which can be used 
 for verification if `consumer-key`, `consumer-secret`, `token` and `token-secret` have been successfully authorized.
 
 * The `path-to-violations-file` is a path to a JSON formatted file, with violations downloaded from 

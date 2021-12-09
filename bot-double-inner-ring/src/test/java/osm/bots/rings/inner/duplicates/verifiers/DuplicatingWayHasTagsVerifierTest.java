@@ -37,7 +37,7 @@ class DuplicatingWayHasTagsVerifierTest {
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("getTestCases")
     void shouldVerifyIfWayNotInViolatingRelationHasAnyTags(
-            String testCaseName,
+            String description,
             ViolatingOsmData violatingOsmData,
             boolean verifierResult) {
 

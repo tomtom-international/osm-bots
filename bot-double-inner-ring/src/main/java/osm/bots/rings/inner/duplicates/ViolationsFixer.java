@@ -2,7 +2,7 @@ package osm.bots.rings.inner.duplicates;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import osm.bots.rings.inner.duplicates.osmapi.fetch.OsmDataFetcher;
+import osm.bots.rings.inner.duplicates.osmapi.fetch.FetchClient;
 import osm.bots.rings.inner.duplicates.osmapi.fix.ViolationFixGenerator;
 import osm.bots.rings.inner.duplicates.osmapi.model.ViolatingOsmData;
 import osm.bots.rings.inner.duplicates.osmapi.model.ViolationFix;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 class ViolationsFixer {
 
     private final OsmoseViolationsFetcher osmoseViolationsFetcher;
-    private final OsmDataFetcher osmDataFetcher;
+    private final FetchClient fetchClient;
     private final DataVerifier dataVerifier;
     private final ViolationFixGenerator violationFixGenerator;
     private final OsmFixUploader osmFixUploader;
@@ -44,7 +44,7 @@ class ViolationsFixer {
 
     private List<ViolatingOsmData> fetchViolationsData(List<DuplicatedInnerPolygonViolation> osmoseViolations) {
         return osmoseViolations.stream()
-                .map(osmDataFetcher::fetchDataForViolation)
+                .map(fetchClient::fetchDataForViolation)
                 .flatMap(Optional::stream)
                 .collect(Collectors.toList());
     }

@@ -1,50 +1,58 @@
 package osm.bots.rings.inner.duplicates.osmapi.fetch;
 
+import de.westnordost.osmapi.map.data.OsmRelation;
+import de.westnordost.osmapi.map.data.OsmWay;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import osm.bots.rings.inner.duplicates.RunParameters;
-import osm.bots.rings.inner.duplicates.osmapi.model.ViolatingOsmData;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import osm.bots.rings.inner.duplicates.osmose.DuplicatedInnerPolygonViolation;
 import osm.bots.rings.inner.duplicates.osmose.ViolatingOsmIds;
+import osm.bots.rings.inner.duplicates.utils.TestFeatureGenerator;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
-@ActiveProfiles("test")
-@SpringBootTest(classes = {RunParameters.class, FetchConfiguration.class})
-@EnableAutoConfiguration
+@ExtendWith(MockitoExtension.class)
 class OsmDataFetcherTest {
 
-    @Autowired
-    private RunParameters runParameters;
+    @Mock
+    private OsmDataClient osmDataClient;
 
-    @Autowired
     private OsmDataFetcher osmDataFetcher;
+
+    @BeforeEach
+    void setUp() {
+        osmDataFetcher = new OsmDataFetcher(osmDataClient);
+    }
 
     @Test
     void shouldFetchCorrectData() {
-        // given
-        long relationId = 2006740L;
-        long innerRingWayId = 148813138L;
-        long duplicatingWayId = 148813181L;
-        ViolatingOsmIds violatingOsmIds = new ViolatingOsmIds(List.of(relationId), List.of(innerRingWayId, duplicatingWayId));
+        //  given
+        final long WAY_1_ID = 1L;
+        final long WAY_2_ID = 2L;
+        final long RELATION_ID = 1L;
+        OsmWay way1 = TestFetchDataGenerator.createWay(WAY_1_ID);
+        OsmWay way2 = TestFetchDataGenerator.createWay(WAY_2_ID);
+        OsmRelation relation = TestFetchDataGenerator.createRelation(RELATION_ID);
+        when(osmDataClient.getRelation(RELATION_ID)).thenReturn(relation);
+        when(osmDataClient.getWay(WAY_1_ID)).thenReturn(way1);
+        when(osmDataClient.getWay(WAY_2_ID)).thenReturn(way2);
+        when(osmDataClient.getRelationsForWay(WAY_1_ID)).thenReturn(List.of(relation));
+        when(osmDataClient.getRelationsForWay(WAY_2_ID)).thenReturn(List.of());
 
-        // when
-        Optional<ViolatingOsmData> violatingOsmData = osmDataFetcher.fetchDataForViolation(new DuplicatedInnerPolygonViolation(
-                1170,
-                violatingOsmIds));
+        DuplicatedInnerPolygonViolation violation =
+                new DuplicatedInnerPolygonViolation(1170, new ViolatingOsmIds(List.of(RELATION_ID), List.of(WAY_1_ID, WAY_2_ID)));
+
+        //  when
+        OsmData actual = osmDataFetcher.fetch(violation);
 
         // then
-        assertThat(violatingOsmData).isPresent();
-        ViolatingOsmData violatingData = violatingOsmData.get();
-
-        assertThat(violatingData.getRelation().getId()).isEqualTo(relationId);
-        assertThat(violatingData.getDuplicatingWay().getWay().getId()).isEqualTo(duplicatingWayId);
-        assertThat(violatingData.getInnerRingWay().getWay().getId()).isEqualTo(innerRingWayId);
+        assertThat(actual)
+                .usingRecursiveComparison()
+                .isEqualTo(TestFetchDataGenerator.createOsmData(RELATION_ID, WAY_1_ID, WAY_2_ID));
     }
 }

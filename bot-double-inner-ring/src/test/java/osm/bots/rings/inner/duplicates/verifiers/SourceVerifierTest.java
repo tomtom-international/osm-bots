@@ -75,7 +75,7 @@ class SourceVerifierTest {
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("getTestCases")
     void shouldVerifyIfSourceTagsAreTheSameOnRelationAndInnerWay(
-            String testCaseName,
+            String description,
             List<String> sourceTagValues,
             ViolatingOsmData violatingOsmData,
             boolean verifierResult) {

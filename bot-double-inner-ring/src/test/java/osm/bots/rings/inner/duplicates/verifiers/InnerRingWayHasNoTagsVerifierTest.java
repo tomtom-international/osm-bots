@@ -38,7 +38,7 @@ class InnerRingWayHasNoTagsVerifierTest {
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("getTestCases")
     void shouldVerifyIfWayInViolatingRelationHasNoTags(
-            String testCaseName,
+            String description,
             ViolatingOsmData violatingOsmData,
             boolean verifierResult) {
 

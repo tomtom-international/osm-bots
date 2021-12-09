@@ -43,7 +43,7 @@ class InnerRingWayIsOnlyMemberOfViolatingRelationVerifierTest {
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("getTestCases")
     void shouldVerifyThatWayFromViolatingRelationHasNoOtherParentRelations(
-            String testCaseName,
+            String description,
             ViolatingOsmData violatingOsmData,
             boolean verifierResult) {
 

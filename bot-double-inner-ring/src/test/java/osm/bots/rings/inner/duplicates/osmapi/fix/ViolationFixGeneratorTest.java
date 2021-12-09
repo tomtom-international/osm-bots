@@ -1,11 +1,9 @@
 package osm.bots.rings.inner.duplicates.osmapi.fix;
 
 import de.westnordost.osmapi.map.data.OsmWay;
-import de.westnordost.osmapi.map.data.Relation;
 import org.junit.jupiter.api.Test;
 import osm.bots.rings.inner.duplicates.osmapi.model.ViolatingOsmData;
 import osm.bots.rings.inner.duplicates.osmapi.model.ViolationFix;
-import osm.bots.rings.inner.duplicates.osmapi.model.WayWithParentRelations;
 import osm.bots.rings.inner.duplicates.utils.TestFeatureGenerator;
 
 import java.util.HashMap;
@@ -40,17 +38,37 @@ class ViolationFixGeneratorTest {
     }
 
     private ViolatingOsmData createViolatingOsmData(List<Long> innerWayNodes, List<Long> duplicatingWayNodes, Map<String, String> duplicatingWayTags) {
-        Relation relation = TestFeatureGenerator.createRelation();
-        WayWithParentRelations innerWay = TestFeatureGenerator.createWayViolation(1L, innerWayNodes, new HashMap<>(), List.of(relation.getId()));
-        WayWithParentRelations duplicatingWay = TestFeatureGenerator.createWayViolation(2L, duplicatingWayNodes, duplicatingWayTags, List.of());
-        return new ViolatingOsmData(relation, innerWay, duplicatingWay);
+        return TestFeatureGenerator.violatingOsmData()
+                .relationId(1L)
+                .innerRingWay(TestFeatureGenerator.wayWithParentRelations()
+                        .wayId(1L)
+                        .wayTags(new HashMap<>())
+                        .wayNodes(innerWayNodes)
+                        .parentRelationId(1L)
+                        .build())
+                .duplicatingWay(TestFeatureGenerator.wayWithParentRelations()
+                        .wayId(2L)
+                        .wayNodes(duplicatingWayNodes)
+                        .wayTags(duplicatingWayTags)
+                        .build())
+                .build();
     }
 
     private ViolationFix createOsmDataChange(List<Long> innerWayNodes, List<Long> duplicatingWayNodes, Map<String, String> tags) {
-        OsmWay wayWithUpdatedTags = new OsmWay(1L, 1, innerWayNodes, tags);
+        OsmWay wayWithUpdatedTags = TestFeatureGenerator.way()
+                .id(1L)
+                .tags(tags)
+                .nodes(innerWayNodes)
+                .build();
         wayWithUpdatedTags.setModified(true);
-        OsmWay wayToRemove = new OsmWay(2L, 1, duplicatingWayNodes, tags);
+
+        OsmWay wayToRemove = TestFeatureGenerator.way()
+                .id(2L)
+                .tags(tags)
+                .nodes(duplicatingWayNodes)
+                .build();
         wayToRemove.setDeleted(true);
+
         return new ViolationFix(List.of(wayToRemove, wayWithUpdatedTags));
     }
 }

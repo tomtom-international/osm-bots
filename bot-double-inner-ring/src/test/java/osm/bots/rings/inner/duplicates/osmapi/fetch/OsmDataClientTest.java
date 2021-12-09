@@ -20,18 +20,18 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class OsmFetchClientTest {
+class OsmDataClientTest {
 
     private static final long FEATURE_ID = 10633691L;
 
     @Mock
-    MapDataApi mapDataApi;
+    private MapDataApi mapDataApi;
 
-    OsmFetchClient osmFetchClient;
+    private OsmDataClient osmDataClient;
 
     @BeforeEach
     void setUp() {
-        osmFetchClient = new OsmFetchClient(mapDataApi);
+        osmDataClient = new OsmDataClient(mapDataApi);
     }
 
     @Test
@@ -43,7 +43,7 @@ class OsmFetchClientTest {
                 .thenReturn(way);
 
         //  when
-        Way actualWay = osmFetchClient.getWay(FEATURE_ID);
+        Way actualWay = osmDataClient.getWay(FEATURE_ID);
 
         //  then
         verify(mapDataApi, times(2))
@@ -60,7 +60,7 @@ class OsmFetchClientTest {
                 .thenReturn(relation);
 
         //  when
-        Relation actualRelation = osmFetchClient.getRelation(FEATURE_ID);
+        Relation actualRelation = osmDataClient.getRelation(FEATURE_ID);
 
         //  then
         verify(mapDataApi, times(2))
@@ -76,7 +76,7 @@ class OsmFetchClientTest {
                 .thenReturn(List.of());
 
         //  when
-        List<Relation> actualRelationsForWay = osmFetchClient.getRelationsForWay(FEATURE_ID);
+        List<Relation> actualRelationsForWay = osmDataClient.getRelationsForWay(FEATURE_ID);
 
         //  then
         verify(mapDataApi, times(2))

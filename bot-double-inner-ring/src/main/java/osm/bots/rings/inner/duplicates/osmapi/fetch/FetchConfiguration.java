@@ -13,10 +13,15 @@ class FetchConfiguration {
 
     @Bean
     OsmDataFetcher getOsmDataFetcher(RunParameters parameters) {
-        OsmFetchClient osmFetchClient = new OsmFetchClient(
+        OsmDataClient osmDataClient = new OsmDataClient(
                 getReadMapDataApi(parameters.getOpenstreetmapApiUrl())
         );
-        return new OsmDataFetcher(osmFetchClient);
+        return new OsmDataFetcher(osmDataClient);
+    }
+
+    @Bean
+    FetchClient getFetchClient(OsmDataFetcher osmDataFetcher) {
+        return new FetchClient(osmDataFetcher);
     }
 
     private MapDataApi getReadMapDataApi(String openstreetmapApiUrl) {

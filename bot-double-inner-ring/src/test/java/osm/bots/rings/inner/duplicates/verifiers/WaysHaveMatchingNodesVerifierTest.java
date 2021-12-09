@@ -84,7 +84,7 @@ class WaysHaveMatchingNodesVerifierTest {
     @ParameterizedTest(name = "[{index}] {0}")
     @MethodSource("getTestCases")
     void shouldVerifyIfWaysHaveTheSameNodes(
-            String testCaseName,
+            String description,
             ViolatingOsmData violatingOsmData,
             boolean verifierResult) {
         assertThat(waysHaveMatchingNodesVerifier.test(violatingOsmData))

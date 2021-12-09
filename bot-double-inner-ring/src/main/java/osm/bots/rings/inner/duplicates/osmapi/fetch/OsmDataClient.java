@@ -9,11 +9,11 @@ import osm.bots.rings.inner.duplicates.utils.TimeoutFactory;
 
 import java.util.List;
 
-class OsmFetchClient {
+class OsmDataClient {
 
     private final MapDataApi mapDataApi;
 
-    OsmFetchClient(MapDataApi mapDataApi) {
+    OsmDataClient(MapDataApi mapDataApi) {
         this.mapDataApi = mapDataApi;
     }
 

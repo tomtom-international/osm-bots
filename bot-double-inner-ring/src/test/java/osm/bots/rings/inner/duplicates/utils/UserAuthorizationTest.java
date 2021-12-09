@@ -1,4 +1,4 @@
-package osm.bots.innerringbot.utils;
+package osm.bots.rings.inner.duplicates.utils;
 
 import de.westnordost.osmapi.OsmConnection;
 import de.westnordost.osmapi.map.MapDataApi;

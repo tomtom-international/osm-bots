@@ -18,12 +18,16 @@ class TestCaseGenerator {
     static Arguments buildSourceVerifierTestCase(
             @NonNull String name,
             @Singular("sourceTagValues") List<String> sourceTagValues,
-            Map<String, String> relationTags,
-            Map<String, String> duplicatingWayTags,
+            @Singular("relationTags") Map<String, String> relationTags,
+            @Singular("duplicatingWayTags") Map<String, String> duplicatingWayTags,
             boolean verifierResult) {
 
-        OsmRelation violatingRelation = TestFeatureGenerator.createRelation(relationTags);
-        WayWithParentRelations duplicatingWay = TestFeatureGenerator.createWayViolation(List.of(), duplicatingWayTags, List.of());
+        OsmRelation violatingRelation = TestFeatureGenerator.relation()
+                .tags(relationTags)
+                .build();
+        WayWithParentRelations duplicatingWay = TestFeatureGenerator.wayWithParentRelations()
+                .wayTags(duplicatingWayTags)
+                .build();
 
         return Arguments.of(
                 name,
@@ -47,9 +51,19 @@ class TestCaseGenerator {
             @Singular("duplicatingWayParentRelations") List<Long> duplicatingWayParentRelations,
             boolean verifierResult) {
 
-        OsmRelation violatingRelation = TestFeatureGenerator.createRelation(violatingRelationId);
-        WayWithParentRelations innerRingWay = TestFeatureGenerator.createWayViolation(innerRingWayNodes, innerRingWayTags, innerRingWayParentRelations);
-        WayWithParentRelations duplicatingWay = TestFeatureGenerator.createWayViolation(duplicatingWayNodes, duplicatingWayTags, duplicatingWayParentRelations);
+        OsmRelation violatingRelation = TestFeatureGenerator.relation()
+                .id(violatingRelationId)
+                .build();
+        WayWithParentRelations innerRingWay = TestFeatureGenerator.wayWithParentRelations()
+                .wayNodes(innerRingWayNodes)
+                .wayTags(innerRingWayTags)
+                .parentRelationIds(innerRingWayParentRelations)
+                .build();
+        WayWithParentRelations duplicatingWay = TestFeatureGenerator.wayWithParentRelations()
+                .wayNodes(duplicatingWayNodes)
+                .wayTags(duplicatingWayTags)
+                .parentRelationIds(duplicatingWayParentRelations)
+                .build();
 
         return Arguments.of(
                 name,
