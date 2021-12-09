@@ -1,0 +1,137 @@
+buildscript {
+    repositories {
+        dependencies {
+            classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:${SONARQUBE_PLUGIN_VERSION}"
+        }
+    }
+}
+
+plugins {
+    id 'java'
+    id 'idea'
+    id 'jacoco'
+    id 'maven-publish'
+    id 'org.sonarqube' version "${SONARQUBE_PLUGIN_VERSION}"
+    id 'com.github.johnrengelman.shadow' version "${SHADOW_PLUGIN_VERSION}"
+    id 'pl.allegro.tech.build.axion-release' version "${AXION_RELEASE_PLUGIN_VERSION}"
+    id 'org.springframework.boot' version "${SPRING_BOOT_VERSION}"
+}
+
+
+apply from: 'dependencies.gradle'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven {
+        url = 'https://plugins.gradle.org/m2/'
+    }
+    maven {
+        url = 'https://repo.osgeo.org/repository/release/'
+    }
+}
+
+idea {
+    module {
+        sourceDirs += file('src/main/java')
+        testSourceDirs += file('src/test/java')
+        downloadSources = true
+        downloadJavadoc = false
+    }
+}
+
+sourceSets {
+    main {
+        java.srcDirs = ['src/main/java']
+        resources.srcDirs = ['src/main/resources']
+    }
+    test {
+        java.srcDirs = ['src/test/java']
+        resources.srcDirs = ['src/test/resources']
+    }
+}
+
+dependencies {
+    // TT
+
+    // external
+    implementation packages.jackson
+    implementation packages.logback.classic
+    implementation packages.logback.core
+    compileOnly packages.lombok
+    annotationProcessor packages.lombok
+    implementation packages.osmapi_map
+    implementation packages.sl4j
+    implementation packages.spring.boot.starter
+    implementation packages.spring.boot.starter_validation
+    implementation packages.failsafe
+
+    // test - external
+    testImplementation packages.assertj
+    testImplementation packages.junit.jupiter.api
+    testRuntimeOnly packages.junit.jupiter.engine
+    testImplementation packages.junit.params
+    testCompileOnly packages.lombok
+    testAnnotationProcessor packages.lombok
+    testCompileOnly packages.mockito.core
+    testImplementation packages.mockito.inline
+    testRuntimeOnly packages.mockito.junit_jupiter
+    testImplementation packages.spring.boot.starter_test
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "failed"
+        exceptionFormat "full"
+    }
+
+    afterSuite { desc, result ->
+        if (!desc.parent) {
+            println "\nUnit tests result: ${result.resultType}"
+            println "Unit test summary: ${result.testCount} tests," +
+                    "${result.successfulTestCount} succeeded," +
+                    "${result.failedTestCount} failed," +
+                    "${result.skippedTestCount} skipped"
+        }
+    }
+}
+
+jacoco {
+    toolVersion = "${JACOCO_VERSION}"
+}
+
+jacocoTestReport {
+    executionData { tasks.withType(Test).findAll { it.jacoco.destinationFile.exists() }*.jacoco.destinationFile }
+    reports {
+        xml.enabled true
+        html.enabled = true
+    }
+}
+test.finalizedBy jacocoTestReport
+
+tasks.withType(Test) {
+    systemProperties["junit.jupiter.execution.parallel.enabled"] = true
+    systemProperties["junit.jupiter.execution.parallel.mode.default"] = "concurrent"
+    maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
+    testLogging {
+        events "failed"
+        exceptionFormat "full"
+    }
+}
+
+clean {
+    delete "${buildDir}/../logs"
+    delete "${buildDir}/../debug"
+    delete "${buildDir}/../out"
+}
+
+sonarqube {
+    properties {
+        property 'sonar.projectName', projectName
+        property 'sonar.moduleKey', artifactGroup + ":" + projectName
+        property 'sonar.java.binaries', 'build/classes'
+        property 'sonar.tests', 'src/test'
+        property 'sonar.java.coveragePlugin', 'jacoco'
+    }
+}

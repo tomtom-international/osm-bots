@@ -1,0 +1,10 @@
+@startuml
+
+component "Inner Ring BOT" as innerRingBot
+component "OSMOSE" as osmose
+component "OSM" as osm
+
+innerRingBot -left-> osmose: Read violations
+innerRingBot -right-> osm: Send changes
+
+@enduml
