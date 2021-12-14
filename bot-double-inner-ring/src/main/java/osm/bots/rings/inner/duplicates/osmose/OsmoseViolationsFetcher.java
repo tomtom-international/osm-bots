@@ -10,9 +10,11 @@ public class OsmoseViolationsFetcher {
 
     private final OsmoseViolationsJsonReader reader;
     private final OsmoseViolationsValidator validator;
+    private final DuplicatedViolationFilter duplicatedViolationsFilter;
 
     public List<DuplicatedInnerPolygonViolation> fetchViolations(Path path) {
         List<DuplicatedInnerPolygonViolation> allViolations = reader.read(path);
-        return validator.getValidViolations(allViolations);
+        List<DuplicatedInnerPolygonViolation> deduplicatedViolations = duplicatedViolationsFilter.deduplicate(allViolations);
+        return validator.getValidViolations(deduplicatedViolations);
     }
 }

@@ -35,8 +35,4 @@
         <appender-ref ref="Console"/>
     </root>
 
-    <logger name="osm.bots.rings.inner.duplicates" level="debug" additivity="false">
-        <appender-ref ref="RollingFile"/>
-    </logger>
-
 </configuration>

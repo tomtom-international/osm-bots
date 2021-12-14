@@ -25,7 +25,7 @@ class OsmDataConverter {
                     duplicatingWayCandidate.get()
             ));
         }
-        log.warn("Incomplete data for violation relation id {}", osmData.getRelation().getId());
+        log.warn("Incomplete data for violation: {}", osmData);
         return Optional.empty();
     }
 
