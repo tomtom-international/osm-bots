@@ -18,6 +18,7 @@ public class OsmFixUploader {
 
     public OsmFixUploader(OsmWriteClient osmWriteClient, String osmDiscussionPage, String osmWikiDocumentationPage) {
         this(osmWriteClient, Map.of(
+                "comment", "Fix duplicated inner rings",
                 "automatic", "yes",
                 "bot", "yes",
                 "osm_discussion_page", osmDiscussionPage,
