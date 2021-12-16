@@ -15,8 +15,10 @@ class SourceVerifierTest {
 
     private static final String SOURCE_1 = "CanVec 4.0 - NRCan";
     private static final String SOURCE_2 = "CanVec 10.0 - NRCan";
+    private static final String SOURCE_3 = "CanVec 11.0 - NRCan";
     private static final Map<String, String> SOURCE_TAG_1 = Map.of("source", SOURCE_1);
     private static final Map<String, String> SOURCE_TAG_2 = Map.of("source", SOURCE_2);
+    private static final Map<String, String> SOURCE_TAG_3 = Map.of("source", SOURCE_3);
 
     public static Stream<Arguments> getTestCases() {
         return Stream.of(
@@ -51,22 +53,16 @@ class SourceVerifierTest {
                         .duplicatingWayTags(SOURCE_TAG_2)
                         .verifierResult(true),
                 TestCaseGenerator.sourceVerifierTestCase()
-                        .name("2 Source tag values in config, relation has one of them, way has another one,  verifier should fail")
+                        .name("2 Source tag values in config, relation has one of them, way has another one, verifier should pass")
                         .sourceTagValues(List.of(SOURCE_1, SOURCE_2))
                         .relationTags(SOURCE_TAG_2)
                         .duplicatingWayTags(SOURCE_TAG_1)
-                        .verifierResult(false),
+                        .verifierResult(true),
                 TestCaseGenerator.sourceVerifierTestCase()
-                        .name("2 Source tag values in config, relation has one of them, way has another one,  verifier should fail")
+                        .name("2 Source tag values in config, relation and way have same, not matching to config tag, verifier should fail")
                         .sourceTagValues(List.of(SOURCE_1, SOURCE_2))
-                        .relationTags(SOURCE_TAG_1)
-                        .duplicatingWayTags(SOURCE_TAG_2)
-                        .verifierResult(false),
-                TestCaseGenerator.sourceVerifierTestCase()
-                        .name("2 Source tag values in config, relation and way have same, not matching to config tag,  verifier should fail")
-                        .sourceTagValues(List.of(SOURCE_1, SOURCE_2))
-                        .relationTags(SOURCE_TAG_1)
-                        .duplicatingWayTags(SOURCE_TAG_2)
+                        .relationTags(SOURCE_TAG_3)
+                        .duplicatingWayTags(SOURCE_TAG_3)
                         .verifierResult(false)
         )
                 .map(TestCaseGenerator.SourceVerifierTestCaseBuilder::build);
