@@ -4,7 +4,7 @@ import java.util.List;
 
 import static org.assertj.core.condition.AllOf.allOf;
 import static osm.bots.rings.inner.duplicates.Assertions.deletedWay;
-import static osm.bots.rings.inner.duplicates.Assertions.hasNoRelation;
+import static osm.bots.rings.inner.duplicates.Assertions.hasElements;
 import static osm.bots.rings.inner.duplicates.Assertions.updatedWayWithTags;
 import static osm.bots.rings.inner.duplicates.TestOsmData.SOURCE_TAG;
 import static osm.bots.rings.inner.duplicates.TestOsmData.innerWay;
@@ -34,7 +34,7 @@ class ReplaceWayTagsIntegrationTest extends AbstractIntegrationTest {
                 .way(wayWithSourceTag(WAY_WITH_TAGS_ID, OVERLAPPING_INNER_WAY_NODES))
                 .way(wayWithoutTags(WAY_IN_RELATION_WITHOUT_TAGS_ID, OVERLAPPING_INNER_WAY_NODES))
                 .relation(
-                        TestOsmData.relationWithoutTagsBuilder().id(RELATION_ID)
+                        TestOsmData.relationWithSourceTagBuilder().id(RELATION_ID)
                                 .member(innerWay(WAY_IN_RELATION_WITHOUT_TAGS_ID))
                                 .build()
                 )
@@ -50,7 +50,7 @@ class ReplaceWayTagsIntegrationTest extends AbstractIntegrationTest {
                 allOf(
                         deletedWay(WAY_WITH_TAGS_ID),
                         updatedWayWithTags(WAY_IN_RELATION_WITHOUT_TAGS_ID, SOURCE_TAG),
-                        hasNoRelation()
+                        hasElements(2)
                 )
         );
     }

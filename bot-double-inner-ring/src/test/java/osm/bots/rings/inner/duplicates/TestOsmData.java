@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.Singular;
 import lombok.Value;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -41,20 +42,25 @@ class TestOsmData {
     }
 
     static OsmWay wayWithoutTags(final long id, final List<Long> nodes) {
-        return new OsmWay(id, INITIAL_VERSION, nodes, null);
+        return new OsmWay(id, INITIAL_VERSION, new ArrayList<>(nodes), null);
     }
 
     static OsmWay wayWithSourceTag(final long id, final List<Long> nodes) {
-        return new OsmWay(id, INITIAL_VERSION, nodes, SOURCE_TAG);
+        return new OsmWay(id, INITIAL_VERSION, new ArrayList<>(nodes), SOURCE_TAG);
     }
 
     static OsmRelationMember innerWay(final long wayId) {
         return new OsmRelationMember(wayId, INNER_ROLE, Element.Type.WAY);
     }
 
+    @Builder(builderMethodName = "relationWithSourceTagBuilder", builderClassName = "RelationWithSourceTagBuilder")
+    static OsmRelation relationWithSourceTag(final long id, @Singular final List<RelationMember> members) {
+        return new OsmRelation(id, INITIAL_VERSION, new ArrayList<>(members), SOURCE_TAG);
+    }
+
     @Builder(builderMethodName = "relationWithoutTagsBuilder", builderClassName = "RelationWithoutTagsBuilder")
     static OsmRelation relationWithoutTags(final long id, @Singular final List<RelationMember> members) {
-        return new OsmRelation(id, INITIAL_VERSION, members, SOURCE_TAG);
+        return new OsmRelation(id, INITIAL_VERSION, new ArrayList<>(members), null);
     }
 
     private Stream<RelationMemberWithRelation> relationWayMembers(final Relation relation) {
