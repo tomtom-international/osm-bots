@@ -3,7 +3,7 @@ package osm.bots.rings.inner.duplicates;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import osm.bots.rings.inner.duplicates.osmapi.fetch.FetchClient;
-import osm.bots.rings.inner.duplicates.osmapi.fix.ViolationFixGenerator;
+import osm.bots.rings.inner.duplicates.osmapi.fix.ReplaceWayTagsFixGenerator;
 import osm.bots.rings.inner.duplicates.osmapi.store.FixUploader;
 import osm.bots.rings.inner.duplicates.osmose.OsmoseViolationsFetcher;
 import osm.bots.rings.inner.duplicates.verifiers.DataVerifier;
@@ -16,13 +16,13 @@ class ViolationsFixerConfiguration {
             OsmoseViolationsFetcher osmoseViolationsFetcher,
             FetchClient fetchClient,
             DataVerifier dataVerifier,
-            ViolationFixGenerator violationFixGenerator,
+            ReplaceWayTagsFixGenerator replaceWayTagsFixGenerator,
             FixUploader fixUploader,
             RunParameters runParameters) {
         return new ViolationsFixer(osmoseViolationsFetcher,
                 fetchClient,
                 dataVerifier,
-                violationFixGenerator,
+                replaceWayTagsFixGenerator,
                 fixUploader,
                 runParameters.getMaxViolationsPerChangeset());
     }

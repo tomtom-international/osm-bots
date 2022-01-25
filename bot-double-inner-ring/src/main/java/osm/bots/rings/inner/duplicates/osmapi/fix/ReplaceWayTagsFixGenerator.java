@@ -8,15 +8,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class ViolationFixGenerator {
+public class ReplaceWayTagsFixGenerator implements FixGenerator {
 
-    public List<ViolationFix> generateChanges(List<ViolatingOsmData> violatingOsmData) {
+    public List<ViolationFix> generateFixes(List<ViolatingOsmData> violatingOsmData) {
         return violatingOsmData.stream()
-                .map(this::generateChange)
+                .map(this::generateFix)
                 .collect(Collectors.toList());
     }
 
-    private ViolationFix generateChange(ViolatingOsmData violatingOsmData) {
+    private ViolationFix generateFix(ViolatingOsmData violatingOsmData) {
         OsmWay wayToBeDeleted = (OsmWay) violatingOsmData.getDuplicatingWay().getWay();
         OsmWay wayToBeUpdated = (OsmWay) violatingOsmData.getInnerRingWay().getWay();
         Map<String, String> tagsToBeMoved = wayToBeDeleted.getTags();

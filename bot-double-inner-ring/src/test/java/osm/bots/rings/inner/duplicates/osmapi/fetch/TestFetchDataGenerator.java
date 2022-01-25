@@ -1,8 +1,12 @@
 package osm.bots.rings.inner.duplicates.osmapi.fetch;
 
+import de.westnordost.osmapi.map.data.Element;
 import de.westnordost.osmapi.map.data.OsmRelation;
+import de.westnordost.osmapi.map.data.OsmRelationMember;
 import de.westnordost.osmapi.map.data.OsmWay;
 import de.westnordost.osmapi.map.data.Relation;
+import de.westnordost.osmapi.map.data.RelationMember;
+import de.westnordost.osmapi.map.data.Way;
 import lombok.Builder;
 import lombok.Singular;
 import lombok.experimental.UtilityClass;
@@ -10,6 +14,7 @@ import osm.bots.rings.inner.duplicates.osmapi.model.ViolatingOsmData;
 import osm.bots.rings.inner.duplicates.osmapi.model.WayWithParentRelations;
 import osm.bots.rings.inner.duplicates.utils.TestFeatureGenerator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @UtilityClass
@@ -31,13 +36,17 @@ class TestFetchDataGenerator {
     @Builder(builderMethodName = "osmData", builderClassName = "OsmDataBuilder")
     static OsmData buildOsmData(
             long relationId,
+            List<RelationMember> relationMembers,
             @Singular("wayWithParentRelations") List<WayWithParentRelations> waysWithParentRelations) {
-        Relation relation = createRelation(relationId);
+        List<RelationMember> members = new ArrayList<>();
+        long wayId = waysWithParentRelations.get(0).getWay().getId();
+        members.add(new OsmRelationMember(wayId, "inner", Element.Type.WAY));
+        Relation relation = createRelation(relationId, members);
         return new OsmData(relation, waysWithParentRelations);
     }
 
     static ViolatingOsmData createViolatingOsmData(long relationId, long way1Id, long way2Id) {
-        return TestFeatureGenerator.violatingOsmData()
+        return TestFeatureGenerator.violatingOsmDataWithRelationMember()
                 .relationId(relationId)
                 .innerRingWay(TestFeatureGenerator.wayWithParentRelations()
                         .wayId(way1Id)
@@ -50,9 +59,10 @@ class TestFetchDataGenerator {
                 .build();
     }
 
-    static OsmRelation createRelation(long relationId) {
+    static OsmRelation createRelation(long relationId, List<RelationMember> members) {
         return TestFeatureGenerator.relation()
                 .id(relationId)
+                .members(members)
                 .build();
     }
 
