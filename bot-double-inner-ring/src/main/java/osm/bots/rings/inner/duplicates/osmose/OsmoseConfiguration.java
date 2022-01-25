@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 class OsmoseConfiguration {
 
     @Bean
-    OsmoseViolationsFetcher getOsmoseViolationsFetcher(
+    OsmoseViolationsFetcher osmoseViolationsFetcher(
             OsmoseViolationsJsonReader osmoseViolationsJsonReader,
             OsmoseViolationsValidator osmoseViolationsValidator,
             DuplicatedViolationFilter duplicatedViolationFilter) {
@@ -15,17 +15,17 @@ class OsmoseConfiguration {
     }
 
     @Bean
-    OsmoseViolationsJsonReader getViolationJsonReader() {
+    OsmoseViolationsJsonReader violationJsonReader() {
         return new OsmoseViolationsJsonReader();
     }
 
     @Bean
-    OsmoseViolationsValidator getOsmoseViolationsValidator() {
+    OsmoseViolationsValidator osmoseViolationsValidator() {
         return new OsmoseViolationsValidator();
     }
 
     @Bean
-    DuplicatedViolationFilter getDuplicatedViolationFilter() {
+    DuplicatedViolationFilter duplicatedViolationFilter() {
         return new DuplicatedViolationFilter();
     }
 }

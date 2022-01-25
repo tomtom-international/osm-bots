@@ -20,7 +20,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class OsmDataClientTest {
+class OsmApiDataClientTest {
 
     private static final long FEATURE_ID = 10633691L;
 
@@ -31,7 +31,7 @@ class OsmDataClientTest {
 
     @BeforeEach
     void setUp() {
-        osmDataClient = new OsmDataClient(mapDataApi);
+        osmDataClient = new OsmApiDataClient(mapDataApi);
     }
 
     @Test

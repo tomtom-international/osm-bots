@@ -7,12 +7,12 @@ import org.springframework.context.annotation.Configuration;
 class ViolationFixConfiguration {
 
     @Bean
-    ReplaceRelationMemberFixGenerator getReplaceRelationMemberFixGenerator() {
+    ReplaceRelationMemberFixGenerator replaceRelationMemberFixGenerator() {
         return new ReplaceRelationMemberFixGenerator();
     }
 
     @Bean
-    ReplaceWayTagsFixGenerator getReplaceWayTagsFixGenerator() {
+    ReplaceWayTagsFixGenerator replaceWayTagsFixGenerator() {
         return new ReplaceWayTagsFixGenerator();
     }
 }

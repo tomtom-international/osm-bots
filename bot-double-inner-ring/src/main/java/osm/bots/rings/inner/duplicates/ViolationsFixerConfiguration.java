@@ -12,7 +12,7 @@ import osm.bots.rings.inner.duplicates.verifiers.DataVerifier;
 class ViolationsFixerConfiguration {
 
     @Bean
-    ViolationsFixer getViolationFixer(
+    ViolationsFixer violationFixer(
             OsmoseViolationsFetcher osmoseViolationsFetcher,
             FetchClient fetchClient,
             DataVerifier dataVerifier,
