@@ -1,4 +1,4 @@
-package osm.bots.rings.inner.duplicates.osmapi.fix;
+package osm.bots.rings.inner.duplicates.fix.generator;
 
 import lombok.experimental.UtilityClass;
 import osm.bots.rings.inner.duplicates.osmapi.model.ViolatingOsmData;

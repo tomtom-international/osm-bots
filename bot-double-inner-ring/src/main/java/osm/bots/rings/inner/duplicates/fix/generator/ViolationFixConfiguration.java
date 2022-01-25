@@ -1,4 +1,4 @@
-package osm.bots.rings.inner.duplicates.osmapi.fix;
+package osm.bots.rings.inner.duplicates.fix.generator;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

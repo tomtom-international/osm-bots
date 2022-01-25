@@ -11,8 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class InnerRingApplication implements CommandLineRunner {
 
-    private final ViolationsFixer violationsFixer;
-    private final RunParameters runParameters;
+    private final ViolationsProcessor violationsProcessor;
 
     public static void main(String[] args) {
         SpringApplication.run(InnerRingApplication.class, args);
@@ -21,8 +20,7 @@ public class InnerRingApplication implements CommandLineRunner {
     @Override
     public void run(String... args) {
         log.info("Running double inner ring fixer for following arguments {}", args);
-
-        violationsFixer.fixViolations(runParameters.getPathToViolationsFile());
+        violationsProcessor.processViolations();
         log.info("BOT processing has been finished");
     }
 }

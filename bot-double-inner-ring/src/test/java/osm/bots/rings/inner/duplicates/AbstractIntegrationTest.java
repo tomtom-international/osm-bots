@@ -32,15 +32,13 @@ import static osm.bots.rings.inner.duplicates.Assertions.assertThat;
 abstract class AbstractIntegrationTest {
 
     @MockBean
-    protected OsmoseViolationsReader violationJsonReader;
+    protected OsmoseViolationsReader violationReader;
     @MockBean
     protected OsmDataClient osmDataClient;
     @SpyBean
     protected FixUploader fixUploader;
     @Autowired
-    private ViolationsFixer violationsFixer;
-    @Autowired
-    private RunParameters runParameters;
+    private ViolationsProcessor violationsProcessor;
     private final List<List<ViolationFix>> interceptedChangesets = new ArrayList<>();
 
     protected abstract List<TestViolation> givenViolations();
@@ -64,7 +62,7 @@ abstract class AbstractIntegrationTest {
         prepareViolations(givenViolations());
         prepareOsmData(givenOsmData());
         //when
-        violationsFixer.fixViolations(runParameters.getPathToViolationsFile());
+        violationsProcessor.processViolations();
         //then
         thenValidateUploadedChangesets(assertThat(interceptedChangesets));
     }
@@ -84,7 +82,7 @@ abstract class AbstractIntegrationTest {
         final List<InnerPolygonOsmoseViolation> violations = testViolations.stream()
                 .map(TestViolation::toDuplicatedInnerPolygonViolation)
                 .collect(toList());
-        when(violationJsonReader.read(any())).thenReturn(violations);
+        when(violationReader.read()).thenReturn(violations);
     }
 
     @Configuration

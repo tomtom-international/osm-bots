@@ -1,4 +1,4 @@
-package osm.bots.rings.inner.duplicates.osmapi.fix;
+package osm.bots.rings.inner.duplicates.fix.generator;
 
 import de.westnordost.osmapi.map.data.Element.Type;
 import de.westnordost.osmapi.map.data.OsmRelation;
@@ -17,7 +17,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static osm.bots.rings.inner.duplicates.osmapi.fix.FixGeneratorTestData.NODES_EXAMPLE;
+import static osm.bots.rings.inner.duplicates.fix.generator.FixGeneratorTestData.NODES_EXAMPLE;
 
 class ReplaceRelationMemberFixGeneratorTest {
 

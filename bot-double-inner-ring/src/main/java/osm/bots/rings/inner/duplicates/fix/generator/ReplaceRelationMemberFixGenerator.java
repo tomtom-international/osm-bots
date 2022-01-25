@@ -1,4 +1,4 @@
-package osm.bots.rings.inner.duplicates.osmapi.fix;
+package osm.bots.rings.inner.duplicates.fix.generator;
 
 import de.westnordost.osmapi.map.data.Element;
 import de.westnordost.osmapi.map.data.OsmRelation;
@@ -17,13 +17,8 @@ public class ReplaceRelationMemberFixGenerator implements FixGenerator {
 
     private static final String INNER_ROLE = "inner";
 
-    public List<ViolationFix> generateFixes(List<ViolatingOsmData> violatingOsmData) {
-        return violatingOsmData.stream()
-                .map(this::generateFix)
-                .collect(Collectors.toList());
-    }
-
-    private ViolationFix generateFix(ViolatingOsmData violatingOsmData) {
+    @Override
+    public ViolationFix generateFix(ViolatingOsmData violatingOsmData) {
         OsmWay wayWithTags = (OsmWay) violatingOsmData.getDuplicatingWay().getWay();
         OsmWay wayToBeDeleted = (OsmWay) violatingOsmData.getInnerRingWay().getWay();
         OsmRelation relation = (OsmRelation) violatingOsmData.getRelation();

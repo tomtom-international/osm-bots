@@ -1,4 +1,4 @@
-package osm.bots.rings.inner.duplicates.osmapi.fix;
+package osm.bots.rings.inner.duplicates.fix.generator;
 
 import de.westnordost.osmapi.map.data.OsmWay;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static osm.bots.rings.inner.duplicates.osmapi.fix.FixGeneratorTestData.NODES_EXAMPLE;
+import static osm.bots.rings.inner.duplicates.fix.generator.FixGeneratorTestData.NODES_EXAMPLE;
 
 class ReplaceWayTagsFixGeneratorTest {
 
