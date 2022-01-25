@@ -3,6 +3,7 @@ package osm.bots.rings.inner.duplicates.verifiers;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import osm.bots.rings.inner.duplicates.statistics.StatisticsRepository;
 
 import java.util.List;
 
@@ -10,8 +11,8 @@ import java.util.List;
 class VerifierConfiguration {
 
     @Bean
-    DataVerifier dataVerifier(List<Verifier> verifiers) {
-        return new DataVerifier(verifiers);
+    DataVerifier dataVerifier(List<Verifier> verifiers, StatisticsRepository statisticsRepository) {
+        return new DataVerifier(verifiers, statisticsRepository);
     }
 
     @Bean

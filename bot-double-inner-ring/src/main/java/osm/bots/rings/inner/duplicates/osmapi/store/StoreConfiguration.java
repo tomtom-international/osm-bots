@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import osm.bots.rings.inner.duplicates.OpenStreetMapApiParameters;
 import osm.bots.rings.inner.duplicates.OpenStreetMapApiParameters.OpenStreetMapApiCredential;
 import osm.bots.rings.inner.duplicates.RunParameters;
+import osm.bots.rings.inner.duplicates.statistics.StatisticsRepository;
 
 import static java.util.Objects.requireNonNull;
 
@@ -16,12 +17,12 @@ import static java.util.Objects.requireNonNull;
 class StoreConfiguration {
 
     @Bean
-    FixUploader changesetUploader(RunParameters runParameters) {
+    FixUploader changesetUploader(StatisticsRepository statisticsRepository, RunParameters runParameters) {
         if (runParameters.isUploadFixes()) {
             OsmWriteClient osmWriteClient = new OsmWriteClient(writeDataApi(runParameters.getOpenStreetMapApi()));
-            return new OsmApiFixUploader(osmWriteClient, runParameters.getOsmDiscussionPage(), runParameters.getOsmWikiDocumentationPage());
+            return new OsmApiFixUploader(statisticsRepository, osmWriteClient, runParameters.getOsmDiscussionPage(), runParameters.getOsmWikiDocumentationPage());
         } else {
-            return new LogOnlyFixUploader();
+            return new LogOnlyFixUploader(statisticsRepository);
         }
     }
 

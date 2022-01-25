@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import osm.bots.rings.inner.duplicates.fix.Partitions;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,29 +20,29 @@ public class DuplicatedViolationPartitionCreator {
     private static class PartitionWorker {
 
         private final int maxViolationsPerChangeset;
-        private final List<List<DuplicatedViolation>> partitionedViolations;
+        private final Partitions<DuplicatedViolation> partitionedViolations;
 
         private PartitionWorker(int maxViolationsPerChangeset) {
             this.maxViolationsPerChangeset = maxViolationsPerChangeset;
-            partitionedViolations = new ArrayList<>();
+            partitionedViolations = new Partitions<>(new ArrayList<>());
         }
 
-        private Collection<List<DuplicatedViolation>> createPartitions(List<DuplicatedViolation> allDuplicatedViolations) {
+        private Partitions<DuplicatedViolation> createPartitions(List<DuplicatedViolation> allDuplicatedViolations) {
             for (DuplicatedViolation duplicatedViolation : allDuplicatedViolations) {
                 boolean successfullyAddedViolation = addViolationsToAlreadyExistingPartition(duplicatedViolation);
                 if (!successfullyAddedViolation) {
                     addNewPartition(duplicatedViolation);
                 }
             }
-            log.info("{} duplicated violations has been split into {} partitions", allDuplicatedViolations.size(), partitionedViolations.size());
+            log.info("{} duplicated violations has been split into {} partitions", allDuplicatedViolations.size(), partitionedViolations.getViolationsPartitions().size());
             return partitionedViolations;
         }
 
         private boolean addViolationsToAlreadyExistingPartition(DuplicatedViolation violation) {
-            if (partitionedViolations.isEmpty()) {
+            if (partitionedViolations.getViolationsPartitions().isEmpty()) {
                 return false;
             }
-            for (List<DuplicatedViolation> partition : partitionedViolations) {
+            for (List<DuplicatedViolation> partition : partitionedViolations.getViolationsPartitions()) {
                 if (possibleToAddViolationsToPartition(violation, partition)) {
                     partition.add(violation);
                     return true;
@@ -86,7 +85,7 @@ public class DuplicatedViolationPartitionCreator {
         private void addNewPartition(DuplicatedViolation duplicatedViolation) {
             ArrayList<DuplicatedViolation> newPartition = new ArrayList<>();
             newPartition.add(duplicatedViolation);
-            partitionedViolations.add(newPartition);
+            partitionedViolations.getViolationsPartitions().add(newPartition);
         }
     }
 }

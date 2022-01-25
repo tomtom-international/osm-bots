@@ -3,6 +3,7 @@ package osm.bots.rings.inner.duplicates.osmose;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import osm.bots.rings.inner.duplicates.RunParameters;
+import osm.bots.rings.inner.duplicates.statistics.StatisticsRepository;
 
 @Configuration
 class OsmoseConfiguration {
@@ -13,11 +14,13 @@ class OsmoseConfiguration {
             OsmoseViolationsValidator osmoseViolationsValidator,
             DuplicatedViolationFilter duplicatedViolationFilter,
             DuplicatedViolationPartitionCreator duplicatedViolationPartitionCreator,
+            StatisticsRepository statisticsRepository,
             RunParameters runParameters) {
         return new OsmoseViolationsFetcher(osmoseViolationsReader,
                 osmoseViolationsValidator,
                 duplicatedViolationFilter,
                 duplicatedViolationPartitionCreator,
+                statisticsRepository,
                 runParameters.getMaxViolationsPerChangeset());
     }
 
