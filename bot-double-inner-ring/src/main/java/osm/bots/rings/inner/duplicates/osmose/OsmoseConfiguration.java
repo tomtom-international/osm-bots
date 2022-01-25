@@ -8,14 +8,14 @@ class OsmoseConfiguration {
 
     @Bean
     OsmoseViolationsFetcher osmoseViolationsFetcher(
-            OsmoseViolationsJsonReader osmoseViolationsJsonReader,
+            OsmoseViolationsReader osmoseViolationsReader,
             OsmoseViolationsValidator osmoseViolationsValidator,
             DuplicatedViolationFilter duplicatedViolationFilter) {
-        return new OsmoseViolationsFetcher(osmoseViolationsJsonReader, osmoseViolationsValidator, duplicatedViolationFilter);
+        return new OsmoseViolationsFetcher(osmoseViolationsReader, osmoseViolationsValidator, duplicatedViolationFilter);
     }
 
     @Bean
-    OsmoseViolationsJsonReader violationJsonReader() {
+    OsmoseViolationsReader violationReader() {
         return new OsmoseViolationsJsonReader();
     }
 

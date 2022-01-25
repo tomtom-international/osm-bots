@@ -5,7 +5,7 @@ import de.westnordost.osmapi.map.data.Way;
 
 import java.util.List;
 
-interface OsmDataClient {
+public interface OsmDataClient {
 
     Way getWay(long wayId);
 

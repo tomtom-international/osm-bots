@@ -4,13 +4,13 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.Collection;
+import java.util.List;
 
 @Configuration
 class VerifierConfiguration {
 
     @Bean
-    DataVerifier dataVerifier(Collection<Verifier> verifiers) {
+    DataVerifier dataVerifier(List<Verifier> verifiers) {
         return new DataVerifier(verifiers);
     }
 

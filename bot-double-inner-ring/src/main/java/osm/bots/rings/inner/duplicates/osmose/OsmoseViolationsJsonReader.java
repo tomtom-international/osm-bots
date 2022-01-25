@@ -9,13 +9,14 @@ import java.nio.file.Path;
 import java.util.List;
 
 @Slf4j
-class OsmoseViolationsJsonReader {
+class OsmoseViolationsJsonReader implements OsmoseViolationsReader {
 
     private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
     private static final TypeReference<List<InnerPolygonOsmoseViolation>> VIOLATION_TYPE_REFERENCE = new TypeReference<>() {
     };
 
-    List<InnerPolygonOsmoseViolation> read(Path path) {
+    @Override
+    public List<InnerPolygonOsmoseViolation> read(Path path) {
         try {
             List<InnerPolygonOsmoseViolation> innerPolygonOsmoseViolations = JSON_MAPPER.readValue(path.toFile(), VIOLATION_TYPE_REFERENCE);
             log.info("{} violations read from: {}", innerPolygonOsmoseViolations.size(), path);

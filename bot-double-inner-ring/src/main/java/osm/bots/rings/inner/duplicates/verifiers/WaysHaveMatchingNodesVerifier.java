@@ -9,6 +9,9 @@ import java.util.Objects;
 
 class WaysHaveMatchingNodesVerifier extends Verifier {
 
+    private static final int MIN_NUMBER_OF_AREAS_NODES = 4;
+
+    @Override
     boolean isMatchingVerifierCriteria(ViolatingOsmData violatingOsmData) {
         List<Long> nodesOfInnerRingWay = violatingOsmData.getNodeIdsOfInnerRingWay();
         List<Long> nodesOfDuplicatingWay = violatingOsmData.getNodeIdsOfDuplicatingWay();
@@ -47,6 +50,6 @@ class WaysHaveMatchingNodesVerifier extends Verifier {
     }
 
     private boolean wayIsNotClosed(List<Long> wayNodes) {
-        return wayNodes.size() < 4 || !Objects.equals(wayNodes.get(0), wayNodes.get(wayNodes.size() - 1));
+        return wayNodes.size() < MIN_NUMBER_OF_AREAS_NODES || !Objects.equals(wayNodes.get(0), wayNodes.get(wayNodes.size() - 1));
     }
 }

@@ -20,78 +20,68 @@ class DuplicatedViolationFilterTest {
 
     public static Stream<Arguments> getTestCasesForUniqueViolations() {
         return Stream.of(
-                        testCaseForUniqueViolations()
-                                .description("Two different violations should not be filtered out")
-                                .violation(osmoseViolation()
-                                        .wayId(1L).wayId(2L))
-                                .violation(osmoseViolation()
-                                        .wayId(3L).wayId(4L))
-                                .expectedViolation(osmoseViolation()
-                                        .wayId(1L).wayId(2L))
-                                .expectedViolation(osmoseViolation()
-                                        .wayId(3L).wayId(4L)),
+                testCaseForUniqueViolations()
+                        .description("Two different violations should not be filtered out")
+                        .violation(osmoseViolation()
+                                .wayId(1L).wayId(2L))
+                        .violation(osmoseViolation()
+                                .wayId(3L).wayId(4L))
+                        .expectedViolation(osmoseViolation()
+                                .wayId(1L).wayId(2L))
+                        .expectedViolation(osmoseViolation()
+                                .wayId(3L).wayId(4L)),
 
-                        testCaseForUniqueViolations()
-                                .description("Two violations with repeating way IDs should be filtered out")
-                                .violation(osmoseViolation()
-                                        .wayId(1L).wayId(2L))
-                                .violation(osmoseViolation()
-                                        .wayId(1L).wayId(2L)),
+                testCaseForUniqueViolations()
+                        .description("Two violations with repeating way IDs should be filtered out")
+                        .violation(osmoseViolation()
+                                .wayId(1L).wayId(2L))
+                        .violation(osmoseViolation()
+                                .wayId(1L).wayId(2L)),
 
-                        testCaseForUniqueViolations()
-                                .description("Two violations with one repeating way ID should be filtered out")
-                                .violation(osmoseViolation()
-                                        .wayId(1L).wayId(2L))
-                                .violation(osmoseViolation()
-                                        .wayId(3L).wayId(2L)))
+                testCaseForUniqueViolations()
+                        .description("Two violations with one repeating way ID should be filtered out")
+                        .violation(osmoseViolation()
+                                .wayId(1L).wayId(2L))
+                        .violation(osmoseViolation()
+                                .wayId(3L).wayId(2L)))
                 .map(TestCaseForUniqueViolations::build);
     }
 
     public static Stream<Arguments> getTestCasesForDuplicatedViolations() {
         return Stream.of(
-                        testCaseForDuplicatedViolations()
-                                .description("Three violations with repeating way ids should be returned")
-                                .violation(osmoseViolation()
-                                        .wayId(1L).wayId(3L).relationId(1L))
-                                .violation(osmoseViolation()
-                                        .wayId(1L).wayId(4L).relationId(2L))
-                                .violation(osmoseViolation()
-                                        .wayId(1L).wayId(5L).relationId(3L))
-                                .expectedViolation(new DuplicatedViolation(List.of(
-                                        osmoseViolation()
-                                                .wayId(1L).wayId(3L).relationId(1L).build(),
-                                        osmoseViolation()
-                                                .wayId(1L).wayId(4L).relationId(2L).build(),
-                                        osmoseViolation()
-                                                .wayId(1L).wayId(5L).relationId(3L).build()
-                                ))),
+                testCaseForDuplicatedViolations()
+                        .description("Three violations with repeating way ids should be returned")
+                        .violation(osmoseViolation()
+                                .wayId(1L).wayId(3L))
+                        .violation(osmoseViolation()
+                                .wayId(1L).wayId(4L))
+                        .violation(osmoseViolation()
+                                .wayId(1L).wayId(5L))
+                        .expectedViolation(new DuplicatedViolation(List.of(
+                                osmoseViolation().wayId(1L).wayId(3L).build(),
+                                osmoseViolation().wayId(1L).wayId(4L).build(),
+                                osmoseViolation().wayId(1L).wayId(5L).build()
+                        ))),
 
-                        testCaseForDuplicatedViolations()
-                                .description("Two violations with not repeating way ids should not be returned")
-                                .violation(osmoseViolation()
-                                        .wayId(1L).wayId(2L).relationId(1L))
-                                .violation(osmoseViolation()
-                                        .wayId(3L).wayId(4L).relationId(2L)),
+                testCaseForDuplicatedViolations()
+                        .description("Two violations with not repeating way ids should not be returned")
+                        .violation(osmoseViolation()
+                                .wayId(1L).wayId(2L))
+                        .violation(osmoseViolation()
+                                .wayId(3L).wayId(4L)),
 
-                        testCaseForDuplicatedViolations()
-                                .description("Two violations with repeating way ids and relation id should not be returned")
-                                .violation(osmoseViolation()
-                                        .wayId(2L).wayId(3L).relationId(1L))
-                                .violation(osmoseViolation()
-                                        .wayId(2L).wayId(4L).relationId(1L)),
-
-                        testCaseForDuplicatedViolations()
-                                .description("Two violations with repeating way id should be returned")
-                                .violation(osmoseViolation()
-                                        .wayId(2L).wayId(3L).relationId(1L))
-                                .violation(osmoseViolation()
-                                        .wayId(2L).wayId(4L).relationId(2L))
-                                .expectedViolation(new DuplicatedViolation(List.of(
-                                        osmoseViolation()
-                                                .wayId(2L).wayId(3L).relationId(1L).build(),
-                                        osmoseViolation()
-                                                .wayId(2L).wayId(4L).relationId(2L).build()
-                                ))))
+                testCaseForDuplicatedViolations()
+                        .description("Two violations with repeating way id should be returned")
+                        .violation(osmoseViolation()
+                                .wayId(2L).wayId(3L))
+                        .violation(osmoseViolation()
+                                .wayId(2L).wayId(4L))
+                        .expectedViolation(new DuplicatedViolation(List.of(
+                                osmoseViolation()
+                                        .wayId(2L).wayId(3L).build(),
+                                osmoseViolation()
+                                        .wayId(2L).wayId(4L).build()
+                        ))))
                 .map(TestCaseForDuplicatedViolations::build);
     }
 

@@ -1,0 +1,28 @@
+spring:
+  main:
+    web-application-type: NONE
+    web-environment: false
+
+run:
+  parameters:
+    upload-fixes: false
+    osm-discussion-page: "test"
+    osm-wiki-documentation-page: "test"
+    open-street-map-api:
+      url: "test"
+    path-to-violations-file: "test"
+    max-violations-per-changeset: 50
+    verifier:
+      ways-have-matching-nodes:
+        active: true
+      duplicating-way-has-tags:
+        active: true
+      duplicating-way-is-not-member-of-any-relation:
+        active: true
+      inner-ring-way-has-no-tags:
+        active: true
+      inner-ring-way-is-only-member-of-violating-relation:
+        active: true
+      source:
+        active: true
+        tag-values: [ "TEST" ]

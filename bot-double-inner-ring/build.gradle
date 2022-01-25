@@ -80,16 +80,35 @@ dependencies {
 }
 
 test {
-    useJUnitPlatform()
-    testLogging {
-        events "failed"
-        exceptionFormat "full"
+    useJUnitPlatform {
+        excludeTags 'integration-test'
     }
+    systemProperties["junit.jupiter.execution.parallel.enabled"] = true
+    systemProperties["junit.jupiter.execution.parallel.mode.default"] = "concurrent"
+    maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
 
     afterSuite { desc, result ->
         if (!desc.parent) {
             println "\nUnit tests result: ${result.resultType}"
             println "Unit test summary: ${result.testCount} tests," +
+                    "${result.successfulTestCount} succeeded," +
+                    "${result.failedTestCount} failed," +
+                    "${result.skippedTestCount} skipped"
+        }
+    }
+}
+
+tasks.register('integrationTest', Test) {
+    group = 'Verification'
+    description = 'Execute all tests which are marked by @IntegrationTest")'
+    systemProperties["junit.jupiter.execution.parallel.enabled"] = false
+    useJUnitPlatform {
+        includeTags "integration-test"
+    }
+    afterSuite { desc, result ->
+        if (!desc.parent) {
+            println "\nIntegration tests result: ${result.resultType}"
+            println "Integration tests test summary: ${result.testCount} tests," +
                     "${result.successfulTestCount} succeeded," +
                     "${result.failedTestCount} failed," +
                     "${result.skippedTestCount} skipped"
@@ -111,9 +130,6 @@ jacocoTestReport {
 test.finalizedBy jacocoTestReport
 
 tasks.withType(Test) {
-    systemProperties["junit.jupiter.execution.parallel.enabled"] = true
-    systemProperties["junit.jupiter.execution.parallel.mode.default"] = "concurrent"
-    maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
     testLogging {
         events "failed"
         exceptionFormat "full"

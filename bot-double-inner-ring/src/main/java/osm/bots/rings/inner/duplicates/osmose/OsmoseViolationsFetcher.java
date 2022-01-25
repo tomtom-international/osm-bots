@@ -8,7 +8,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OsmoseViolationsFetcher {
 
-    private final OsmoseViolationsJsonReader reader;
+    private final OsmoseViolationsReader reader;
     private final OsmoseViolationsValidator validator;
     private final DuplicatedViolationFilter duplicatedViolationsFilter;
 
