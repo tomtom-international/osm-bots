@@ -1,9 +1,9 @@
 package osm.bots.rings.inner.duplicates.osmose;
 
 import lombok.RequiredArgsConstructor;
+import osm.bots.rings.inner.duplicates.fix.Partitions;
 import osm.bots.rings.inner.duplicates.utils.Partition;
 
-import java.util.Collection;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -19,18 +19,18 @@ public class OsmoseViolationsFetcher {
         List<InnerPolygonOsmoseViolation> allViolations = reader.read();
         List<InnerPolygonOsmoseViolation> validViolations = validator.getValidViolations(allViolations);
 
-        Collection<List<InnerPolygonOsmoseViolation>> uniqueViolationChunks = getUniqueViolationsChunks(validViolations);
-        Collection<List<DuplicatedViolation>> duplicatedViolationChunks = getDuplicatedViolationChunks(validViolations);
+        Partitions<InnerPolygonOsmoseViolation> uniqueViolationsPartitions = getUniqueViolationsPartitions(validViolations);
+        Partitions<DuplicatedViolation> duplicatedViolationsPartitions = getDuplicatedViolationsPartitions(validViolations);
 
-        return new OsmoseViolations(uniqueViolationChunks, duplicatedViolationChunks);
+        return new OsmoseViolations(uniqueViolationsPartitions, duplicatedViolationsPartitions);
     }
 
-    private Collection<List<InnerPolygonOsmoseViolation>> getUniqueViolationsChunks(List<InnerPolygonOsmoseViolation> validViolations) {
+    private Partitions<InnerPolygonOsmoseViolation> getUniqueViolationsPartitions(List<InnerPolygonOsmoseViolation> validViolations) {
         List<InnerPolygonOsmoseViolation> uniqueViolations = duplicatedViolationsFilter.findUniqueViolations(validViolations);
         return Partition.partitionBySize(uniqueViolations, maxViolationsPerPartition);
     }
 
-    private Collection<List<DuplicatedViolation>> getDuplicatedViolationChunks(List<InnerPolygonOsmoseViolation> validViolations) {
+    private Partitions<DuplicatedViolation> getDuplicatedViolationsPartitions(List<InnerPolygonOsmoseViolation> validViolations) {
         List<DuplicatedViolation> duplicatedViolations = duplicatedViolationsFilter.findDuplicatedViolations(validViolations);
         return partitionCreator.createPartitions(duplicatedViolations, maxViolationsPerPartition);
     }

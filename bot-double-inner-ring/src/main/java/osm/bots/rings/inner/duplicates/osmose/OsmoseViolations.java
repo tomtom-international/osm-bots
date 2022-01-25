@@ -1,13 +1,11 @@
 package osm.bots.rings.inner.duplicates.osmose;
 
 import lombok.Value;
-
-import java.util.Collection;
-import java.util.List;
+import osm.bots.rings.inner.duplicates.fix.Partitions;
 
 @Value
 public class OsmoseViolations {
 
-    Collection<List<InnerPolygonOsmoseViolation>> uniqueViolationsPartitions;
-    Collection<List<DuplicatedViolation>> duplicatedViolationsPartitions;
+    Partitions<InnerPolygonOsmoseViolation> uniqueViolationsPartitions;
+    Partitions<DuplicatedViolation> duplicatedViolationsPartitions;
 }

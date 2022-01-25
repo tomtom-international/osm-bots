@@ -8,8 +8,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import osm.bots.rings.inner.duplicates.fix.Partitions;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -102,10 +102,10 @@ class DuplicatedViolationPartitionCreatorTest {
     @MethodSource("getTestCases")
     void shouldCreateCorrectPartitions(String description, int partitionSize, List<DuplicatedViolation> violations, List<List<InnerPolygonOsmoseViolation>> expectedViolationsInPartitions) {
         //  when
-        Collection<List<DuplicatedViolation>> actualPartitions = partitionCreator.createPartitions(violations, partitionSize);
+        Partitions<DuplicatedViolation> actualPartitions = partitionCreator.createPartitions(violations, partitionSize);
 
         //  then
-        Assertions.assertThat(actualPartitions)
+        Assertions.assertThat(actualPartitions.getViolationsPartitions())
                 .extracting(this::extractAllViolationsForEachPartition)
                 .containsExactlyInAnyOrderElementsOf(expectedViolationsInPartitions);
     }

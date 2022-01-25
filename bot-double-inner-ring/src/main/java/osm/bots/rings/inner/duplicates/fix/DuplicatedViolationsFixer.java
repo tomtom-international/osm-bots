@@ -27,8 +27,9 @@ public class DuplicatedViolationsFixer extends ViolationsFixer {
 
     @Override
     public void fix(OsmoseViolations osmoseViolations) {
-        Collection<List<DuplicatedViolation>> partitions = osmoseViolations.getDuplicatedViolationsPartitions();
-        partitions.forEach(this::fixViolationsInSingleChangeset);
+        Partitions<DuplicatedViolation> partitions = osmoseViolations.getDuplicatedViolationsPartitions();
+        partitions.getViolationsPartitions()
+                .forEach(this::fixViolationsInSingleChangeset);
     }
 
     private void fixViolationsInSingleChangeset(List<DuplicatedViolation> violations) {

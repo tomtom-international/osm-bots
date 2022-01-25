@@ -8,7 +8,6 @@ import osm.bots.rings.inner.duplicates.osmose.InnerPolygonOsmoseViolation;
 import osm.bots.rings.inner.duplicates.osmose.OsmoseViolations;
 import osm.bots.rings.inner.duplicates.verifiers.DataVerifier;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,8 +22,9 @@ public class UniqueViolationsFixer extends ViolationsFixer {
 
     @Override
     public void fix(OsmoseViolations osmoseViolations) {
-        Collection<List<InnerPolygonOsmoseViolation>> partitions = osmoseViolations.getUniqueViolationsPartitions();
-        partitions.forEach(this::fixViolationsInSingleChangeset);
+        Partitions<InnerPolygonOsmoseViolation> partitions = osmoseViolations.getUniqueViolationsPartitions();
+        partitions.getViolationsPartitions()
+                .forEach(this::fixViolationsInSingleChangeset);
     }
 
     private void fixViolationsInSingleChangeset(List<InnerPolygonOsmoseViolation> violations) {

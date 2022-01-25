@@ -2,6 +2,7 @@ package osm.bots.rings.inner.duplicates.osmose;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import osm.bots.rings.inner.duplicates.fix.Partitions;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,9 +13,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class DuplicatedViolationPartitionCreator {
 
-    public Collection<List<DuplicatedViolation>> createPartitions(List<DuplicatedViolation> allDuplicatedViolations, int maxViolationsPerChangeset) {
+    public Partitions<DuplicatedViolation> createPartitions(List<DuplicatedViolation> allDuplicatedViolations, int maxViolationsPerChangeset) {
         PartitionWorker worker = new PartitionWorker(maxViolationsPerChangeset);
-        return worker.createPartitions(allDuplicatedViolations);
+        return new Partitions<>(worker.createPartitions(allDuplicatedViolations));
     }
 
     private static class PartitionWorker {

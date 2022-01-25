@@ -1,6 +1,7 @@
 package osm.bots.rings.inner.duplicates.utils;
 
 import org.junit.jupiter.api.Test;
+import osm.bots.rings.inner.duplicates.fix.Partitions;
 
 import java.util.Collection;
 import java.util.List;
@@ -17,10 +18,10 @@ class PartitionTest {
         Collection<String> testData = createTestData(16);
 
         // when
-        Collection<List<String>> partitions = Partition.partitionByCount(testData, 7);
+        Partitions<String> partitions = Partition.partitionByCount(testData, 7);
 
         // then
-        assertThat(partitions)
+        assertThat(partitions.getViolationsPartitions())
                 .extracting(List::size)
                 .containsExactly(3, 3, 2, 2, 2, 2, 2);
     }
@@ -31,10 +32,10 @@ class PartitionTest {
         Collection<String> testData = createTestData(16);
 
         // when
-        Collection<List<String>> partitions = Partition.partitionBySize(testData, 7);
+        Partitions<String> partitions = Partition.partitionBySize(testData, 7);
 
         // then
-        assertThat(partitions)
+        assertThat(partitions.getViolationsPartitions())
                 .extracting(List::size)
                 .containsExactly(7, 7, 2);
     }
