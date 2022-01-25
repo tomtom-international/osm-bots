@@ -6,7 +6,7 @@ import osm.bots.rings.inner.duplicates.osmapi.fetch.FetchClient;
 import osm.bots.rings.inner.duplicates.osmapi.fix.ViolationFixGenerator;
 import osm.bots.rings.inner.duplicates.osmapi.model.ViolatingOsmData;
 import osm.bots.rings.inner.duplicates.osmapi.model.ViolationFix;
-import osm.bots.rings.inner.duplicates.osmapi.store.OsmFixUploader;
+import osm.bots.rings.inner.duplicates.osmapi.store.FixUploader;
 import osm.bots.rings.inner.duplicates.osmose.DuplicatedInnerPolygonViolation;
 import osm.bots.rings.inner.duplicates.osmose.OsmoseViolationsFetcher;
 import osm.bots.rings.inner.duplicates.utils.Partition;
@@ -26,7 +26,7 @@ class ViolationsFixer {
     private final FetchClient fetchClient;
     private final DataVerifier dataVerifier;
     private final ViolationFixGenerator violationFixGenerator;
-    private final OsmFixUploader osmFixUploader;
+    private final FixUploader fixUploader;
     private final int maxViolationsPerChangeset;
 
     void fixViolations(Path path) {
@@ -58,7 +58,7 @@ class ViolationsFixer {
     private void uploadViolations(List<ViolatingOsmData> filteredViolationData) {
         if (!filteredViolationData.isEmpty()) {
             List<ViolationFix> osmViolationFixes = violationFixGenerator.generateChanges(filteredViolationData);
-            osmFixUploader.uploadFixesInSingleChangeset(osmViolationFixes);
+            fixUploader.uploadFixesInSingleChangeset(osmViolationFixes);
         }
     }
 }

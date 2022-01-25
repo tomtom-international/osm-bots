@@ -11,12 +11,12 @@ import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public class OsmFixUploader {
+public class OsmApiFixUploader implements FixUploader {
 
     private final OsmWriteClient osmWriteClient;
     private final Map<String, String> changesetTags;
 
-    public OsmFixUploader(OsmWriteClient osmWriteClient, String osmDiscussionPage, String osmWikiDocumentationPage) {
+    public OsmApiFixUploader(OsmWriteClient osmWriteClient, String osmDiscussionPage, String osmWikiDocumentationPage) {
         this(osmWriteClient, Map.of(
                 "comment", "Fix duplicated inner rings",
                 "automatic", "yes",
@@ -25,6 +25,7 @@ public class OsmFixUploader {
                 "osm_wiki_documentation_page", osmWikiDocumentationPage));
     }
 
+    @Override
     public void uploadFixesInSingleChangeset(List<ViolationFix> violationFixes) {
         log.info("Uploading changes to OSM for {} violations", violationFixes.size());
         long changesetId = osmWriteClient.openChangeset(changesetTags);

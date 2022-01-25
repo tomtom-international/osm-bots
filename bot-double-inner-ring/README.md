@@ -40,10 +40,10 @@ Inner ring bot can be run using following command:
 >           --args=" \
 >               --run.parameters.osm-discussion-page=osm-discussion-page \
 >               --run.parameters.osm-wiki-documentation-page=osm-wiki-documentation-page \
->               --run.parameters.token=user-token \
->               --run.parameters.token-secret=user-token-secret \
->               --run.parameters.consumer-key=user-consumer-key \
->               --run.parameters.consumer-secret=user-consumer-secret \
+>               --run.parameters.open-street-map-api.credentials.token=user-token \
+>               --run.parameters.open-street-map-api.credentials.token-secret=user-token-secret \
+>               --run.parameters.open-street-map-api.credentials.consumer-key=user-consumer-key \
+>               --run.parameters.open-street-map-api.credentials.consumer-secret=user-consumer-secret \
 >               --run.parameters.path-to-violations-file=user-file-with-violations \
 
 About other possible parameters, please read `Input parameters` section.
@@ -61,19 +61,19 @@ Following run parameters are required to provide by the user:
 >   --run.parameters.osm-wiki-documentation-page=osm-wiki-documentation-page
 
 * The `consumer-key` is what identifies the consumer (can be generated after logging to OSM account)
->   --run.parameters.consumer-key=user-consumer-key
+>   --run.parameters.open-street-map-api.credentials.consumer-key=user-consumer-key
  
 * The `consumer-secret` is the consumer secret used to request access
->   --run.parameters.consumer-secret=user-consumer-secret
+>   --run.parameters.open-street-map-api.credentials.consumer-secret=user-consumer-secret
 
 Parameters `consumer-key` and `consumer-secret` are required to gain authorized access to the protected resources on the OSM server. 
 Detailed instruction how to receive those parameters can be found on [OSM wiki page](https://wiki.openstreetmap.org/wiki/OAuth#OAuth_1.0a)
 
 * The `token` identifier. It is generated once the consumer completes the authorization process
->   --run.parameters.token=user-token
+>   --run.parameters.open-street-map-api.credentials.token=user-token
 
 * The `token-secret` shared secret value. It is generated once the consumer completes the authorization process
->   --run.parameters.token-secret=user-token-secret
+>   --run.parameters.open-street-map-api.credentials.token-secret=user-token-secret
 
 Parameters `token` and `token-secret` are issued to the consumer by the service provider once the consumer completes the authorization. 
 The `token` defines the access rights of the consumer to the resources and is included in each API request.
@@ -88,9 +88,13 @@ for verification if `consumer-key`, `consumer-secret`, `token` and `token-secret
 ### Optional parameters to provide
 Following run parameters are optional, but it is not recommended, to change their default values:
 
-* The `openstreetmap-api-url` is the URL address of OSM Editing API, which is used to get data for violations validation and also all modifications created 
+* The `open-street-map-api.url` is the URL address of OSM Editing API, which is used to get data for violations validation and also all modifications created 
   by BOT are sent to this URL. Recommended value of that property is: `https://api.openstreetmap.org/api/0.6/`
->   --run.parameters.openstreetmap-api-url=https://api.openstreetmap.org/api/0.6/
+>   --run.parameters.open-street-map-api.url=https://api.openstreetmap.org/api/0.6/
+
+* The `upload-fixes` flag determines if changes should be uploaded to OSM Editing API, or just calculated and logged.
+  When set to `false`, all `run.parameters.open-street-map-api.credentials.*` parameters are skipped
+>   --run.parameters.upload-fixes=false
 
 * The `max-violations-per-changeset` is the amount of modifications sent to OSM per changeset (default value is 50)
 >   --run.parameters.max-violations-per-changeset=50  
