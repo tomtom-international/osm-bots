@@ -22,12 +22,12 @@ class OsmoseViolationsJsonReaderTest {
     void shouldReadViolationFromJson() {
         //  given
         Path jsonPath = Paths.get("src", "test", "resources", "exampleOsmoseViolation.json");
-        DuplicatedInnerPolygonViolation expectedViolation = new DuplicatedInnerPolygonViolation(
+        InnerPolygonOsmoseViolation expectedViolation = new InnerPolygonOsmoseViolation(
                 1170,
                 new ViolatingOsmIds(List.of(111L), List.of(222L, 333L)));
 
         //  when
-        List<DuplicatedInnerPolygonViolation> actualViolations = osmoseViolationJsonReader.read(jsonPath);
+        List<InnerPolygonOsmoseViolation> actualViolations = osmoseViolationJsonReader.read(jsonPath);
 
         assertThat(actualViolations)
                 .containsExactlyInAnyOrder(expectedViolation);

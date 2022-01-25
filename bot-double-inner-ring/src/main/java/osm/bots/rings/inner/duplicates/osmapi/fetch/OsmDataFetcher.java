@@ -5,7 +5,7 @@ import de.westnordost.osmapi.map.data.Way;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import osm.bots.rings.inner.duplicates.osmapi.model.WayWithParentRelations;
-import osm.bots.rings.inner.duplicates.osmose.DuplicatedInnerPolygonViolation;
+import osm.bots.rings.inner.duplicates.osmose.InnerPolygonOsmoseViolation;
 
 import java.util.List;
 import java.util.Objects;
@@ -19,7 +19,7 @@ class OsmDataFetcher {
 
     private int violationCounter = 0;
 
-    OsmData fetch(DuplicatedInnerPolygonViolation violation) {
+    OsmData fetch(InnerPolygonOsmoseViolation violation) {
         Relation osmRelation = fetchRelation(violation);
         List<Way> osmWays = fetchWays(violation);
         List<WayWithParentRelations> wayWithParentRelations = fetchParentRelations(osmWays);
@@ -34,7 +34,7 @@ class OsmDataFetcher {
                 .collect(Collectors.toList());
     }
 
-    private List<Way> fetchWays(DuplicatedInnerPolygonViolation violation) {
+    private List<Way> fetchWays(InnerPolygonOsmoseViolation violation) {
         /*
           getWay() method is used instead of getWays(), because getWay() returns null in case of deleted OSM elements
           we want to filter out cases where any of elements were deleted. Unfortunately getWays() returns elements even
@@ -47,7 +47,7 @@ class OsmDataFetcher {
                 .collect(Collectors.toList());
     }
 
-    private Relation fetchRelation(DuplicatedInnerPolygonViolation violation) {
+    private Relation fetchRelation(InnerPolygonOsmoseViolation violation) {
         return osmDataClient
                 .getRelation(violation.getViolatingRelationId());
     }

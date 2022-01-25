@@ -7,7 +7,7 @@ import osm.bots.rings.inner.duplicates.osmapi.fix.ReplaceWayTagsFixGenerator;
 import osm.bots.rings.inner.duplicates.osmapi.model.ViolatingOsmData;
 import osm.bots.rings.inner.duplicates.osmapi.model.ViolationFix;
 import osm.bots.rings.inner.duplicates.osmapi.store.FixUploader;
-import osm.bots.rings.inner.duplicates.osmose.DuplicatedInnerPolygonViolation;
+import osm.bots.rings.inner.duplicates.osmose.InnerPolygonOsmoseViolation;
 import osm.bots.rings.inner.duplicates.osmose.OsmoseViolationsFetcher;
 import osm.bots.rings.inner.duplicates.utils.Partition;
 import osm.bots.rings.inner.duplicates.verifiers.DataVerifier;
@@ -30,19 +30,19 @@ class ViolationsFixer {
     private final int maxViolationsPerChangeset;
 
     void fixViolations(Path path) {
-        List<DuplicatedInnerPolygonViolation> osmoseViolations = osmoseViolationsFetcher.fetchViolations(path);
-        Collection<List<DuplicatedInnerPolygonViolation>> violationChunks = Partition.partitionBySize(osmoseViolations, maxViolationsPerChangeset);
+        List<InnerPolygonOsmoseViolation> osmoseViolations = osmoseViolationsFetcher.fetchViolations(path);
+        Collection<List<InnerPolygonOsmoseViolation>> violationChunks = Partition.partitionBySize(osmoseViolations, maxViolationsPerChangeset);
         violationChunks.forEach(this::fixInSingleChangeset);
     }
 
-    private void fixInSingleChangeset(List<DuplicatedInnerPolygonViolation> osmoseViolations) {
+    private void fixInSingleChangeset(List<InnerPolygonOsmoseViolation> osmoseViolations) {
         List<ViolatingOsmData> allViolatingData = fetchViolationsData(osmoseViolations);
         List<ViolatingOsmData> filteredViolationData = filterDataQualifyingForFix(allViolatingData);
 
         uploadViolations(filteredViolationData);
     }
 
-    private List<ViolatingOsmData> fetchViolationsData(List<DuplicatedInnerPolygonViolation> osmoseViolations) {
+    private List<ViolatingOsmData> fetchViolationsData(List<InnerPolygonOsmoseViolation> osmoseViolations) {
         return osmoseViolations.stream()
                 .map(fetchClient::fetchDataForViolation)
                 .flatMap(Optional::stream)

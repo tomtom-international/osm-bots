@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import osm.bots.rings.inner.duplicates.osmose.DuplicatedInnerPolygonViolation;
+import osm.bots.rings.inner.duplicates.osmose.InnerPolygonOsmoseViolation;
 import osm.bots.rings.inner.duplicates.osmose.ViolatingOsmIds;
 
 import java.util.List;
@@ -45,8 +45,8 @@ class OsmDataFetcherTest {
         when(osmDataClient.getRelationsForWay(WAY_1_ID)).thenReturn(List.of(relation));
         when(osmDataClient.getRelationsForWay(WAY_2_ID)).thenReturn(List.of());
 
-        DuplicatedInnerPolygonViolation violation =
-                new DuplicatedInnerPolygonViolation(1170, new ViolatingOsmIds(List.of(RELATION_ID), List.of(WAY_1_ID, WAY_2_ID)));
+        InnerPolygonOsmoseViolation violation =
+                new InnerPolygonOsmoseViolation(1170, new ViolatingOsmIds(List.of(RELATION_ID), List.of(WAY_1_ID, WAY_2_ID)));
 
         //  when
         OsmData actual = osmDataFetcher.fetch(violation);

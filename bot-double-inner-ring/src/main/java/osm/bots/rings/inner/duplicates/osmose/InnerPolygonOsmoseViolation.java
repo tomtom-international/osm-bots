@@ -10,7 +10,7 @@ import java.util.List;
 @Value
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class DuplicatedInnerPolygonViolation {
+public class InnerPolygonOsmoseViolation {
 
     @JsonProperty("item")
     int osmoseRuleId;

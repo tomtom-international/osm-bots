@@ -12,9 +12,9 @@ public class OsmoseViolationsFetcher {
     private final OsmoseViolationsValidator validator;
     private final DuplicatedViolationFilter duplicatedViolationsFilter;
 
-    public List<DuplicatedInnerPolygonViolation> fetchViolations(Path path) {
-        List<DuplicatedInnerPolygonViolation> allViolations = reader.read(path);
-        List<DuplicatedInnerPolygonViolation> deduplicatedViolations = duplicatedViolationsFilter.deduplicate(allViolations);
+    public List<InnerPolygonOsmoseViolation> fetchViolations(Path path) {
+        List<InnerPolygonOsmoseViolation> allViolations = reader.read(path);
+        List<InnerPolygonOsmoseViolation> deduplicatedViolations = duplicatedViolationsFilter.findUniqueViolations(allViolations);
         return validator.getValidViolations(deduplicatedViolations);
     }
 }

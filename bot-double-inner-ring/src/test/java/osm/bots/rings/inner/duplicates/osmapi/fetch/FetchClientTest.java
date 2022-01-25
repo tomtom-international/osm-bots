@@ -6,7 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import osm.bots.rings.inner.duplicates.osmapi.model.ViolatingOsmData;
-import osm.bots.rings.inner.duplicates.osmose.DuplicatedInnerPolygonViolation;
+import osm.bots.rings.inner.duplicates.osmose.InnerPolygonOsmoseViolation;
 import osm.bots.rings.inner.duplicates.osmose.ViolatingOsmIds;
 import osm.bots.rings.inner.duplicates.utils.TestFeatureGenerator;
 
@@ -36,8 +36,8 @@ class FetchClientTest {
         final long WAY_1_ID = 3L;
         final long WAY_2_ID = 4L;
         final long RELATION_ID = 2L;
-        DuplicatedInnerPolygonViolation violation =
-                new DuplicatedInnerPolygonViolation(1170, new ViolatingOsmIds(List.of(RELATION_ID), List.of(WAY_1_ID, WAY_2_ID)));
+        InnerPolygonOsmoseViolation violation =
+                new InnerPolygonOsmoseViolation(1170, new ViolatingOsmIds(List.of(RELATION_ID), List.of(WAY_1_ID, WAY_2_ID)));
         when(osmDataFetcher.fetch(violation))
                 .thenReturn(TestFetchDataGenerator.createOsmData(RELATION_ID, WAY_1_ID, WAY_2_ID));
         // when
@@ -55,7 +55,7 @@ class FetchClientTest {
         // given
         final long WAY_1_ID = 2L;
         final long RELATION_ID = 1L;
-        DuplicatedInnerPolygonViolation violation = mock(DuplicatedInnerPolygonViolation.class);
+        InnerPolygonOsmoseViolation violation = mock(InnerPolygonOsmoseViolation.class);
 
         OsmData osmData = TestFetchDataGenerator.osmData()
                 .relationId(RELATION_ID)
