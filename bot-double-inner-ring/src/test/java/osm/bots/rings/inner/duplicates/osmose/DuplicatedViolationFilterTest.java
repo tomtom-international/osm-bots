@@ -18,63 +18,102 @@ class DuplicatedViolationFilterTest {
 
     private DuplicatedViolationFilter duplicatedViolationsFilter;
 
-    public static Stream<Arguments> getTestCases() {
-
+    public static Stream<Arguments> getTestCasesForUniqueViolations() {
         return Stream.of(
-                testCase()
+                testCaseForUniqueViolations()
                         .description("Two different violations should not be filtered out")
-                        .violation(duplicatedInnerPolygonViolation()
-                                .wayId(1L)
-                                .wayId(2L))
-                        .violation(duplicatedInnerPolygonViolation()
-                                .wayId(3L)
-                                .wayId(4L))
-                        .expectedViolation(duplicatedInnerPolygonViolation()
-                                .wayId(1L)
-                                .wayId(2L))
-                        .expectedViolation(duplicatedInnerPolygonViolation()
-                                .wayId(3L)
-                                .wayId(4L)),
-                testCase()
-                        .description("Two violations with the same way IDs should be filtered out")
-                        .violation(duplicatedInnerPolygonViolation()
-                                .wayId(1L)
-                                .wayId(2L))
-                        .violation(duplicatedInnerPolygonViolation()
-                                .wayId(1L)
-                                .wayId(2L)),
-                testCase()
-                        .description("Two violations with one the same way ID should be filtered out")
-                        .violation(duplicatedInnerPolygonViolation()
-                                .wayId(1L)
-                                .wayId(2L))
-                        .violation(duplicatedInnerPolygonViolation()
-                                .wayId(3L)
-                                .wayId(2L)))
-                .map(ArgumentsBuilder::build);
+                        .violation(osmoseViolation()
+                                .wayId(1L).wayId(2L))
+                        .violation(osmoseViolation()
+                                .wayId(3L).wayId(4L))
+                        .expectedViolation(osmoseViolation()
+                                .wayId(1L).wayId(2L))
+                        .expectedViolation(osmoseViolation()
+                                .wayId(3L).wayId(4L)),
+
+                testCaseForUniqueViolations()
+                        .description("Two violations with repeating way IDs should be filtered out")
+                        .violation(osmoseViolation()
+                                .wayId(1L).wayId(2L))
+                        .violation(osmoseViolation()
+                                .wayId(1L).wayId(2L)),
+
+                testCaseForUniqueViolations()
+                        .description("Two violations with one repeating way ID should be filtered out")
+                        .violation(osmoseViolation()
+                                .wayId(1L).wayId(2L))
+                        .violation(osmoseViolation()
+                                .wayId(3L).wayId(2L)))
+                .map(TestCaseForUniqueViolations::build);
     }
 
-    @Builder(builderMethodName = "testCase")
-    private static Arguments buildTestCase(
+    public static Stream<Arguments> getTestCasesForDuplicatedViolations() {
+        return Stream.of(
+                testCaseForDuplicatedViolations()
+                        .description("Three violations with repeating way ids should be returned")
+                        .violation(osmoseViolation()
+                                .wayId(1L).wayId(3L))
+                        .violation(osmoseViolation()
+                                .wayId(1L).wayId(4L))
+                        .violation(osmoseViolation()
+                                .wayId(1L).wayId(5L))
+                        .expectedViolation(new DuplicatedViolation(List.of(
+                                osmoseViolation().wayId(1L).wayId(3L).build(),
+                                osmoseViolation().wayId(1L).wayId(4L).build(),
+                                osmoseViolation().wayId(1L).wayId(5L).build()
+                        ))),
+
+                testCaseForDuplicatedViolations()
+                        .description("Two violations with not repeating way ids should not be returned")
+                        .violation(osmoseViolation()
+                                .wayId(1L).wayId(2L))
+                        .violation(osmoseViolation()
+                                .wayId(3L).wayId(4L)),
+
+                testCaseForDuplicatedViolations()
+                        .description("Two violations with repeating way id should be returned")
+                        .violation(osmoseViolation()
+                                .wayId(2L).wayId(3L))
+                        .violation(osmoseViolation()
+                                .wayId(2L).wayId(4L))
+                        .expectedViolation(new DuplicatedViolation(List.of(
+                                osmoseViolation()
+                                        .wayId(2L).wayId(3L).build(),
+                                osmoseViolation()
+                                        .wayId(2L).wayId(4L).build()
+                        ))))
+                .map(TestCaseForDuplicatedViolations::build);
+    }
+
+    @Builder(builderMethodName = "testCaseForUniqueViolations", builderClassName = "TestCaseForUniqueViolations")
+    private static Arguments buildTestCaseForUniqueViolations(
             @NonNull String description,
-            @Singular List<DuplicatedInnerPolygonViolationBuilder> violations,
-            @Singular List<DuplicatedInnerPolygonViolationBuilder> expectedViolations) {
+            @Singular List<OsmoseViolationBuilder> violations,
+            @Singular List<OsmoseViolationBuilder> expectedViolations) {
         return Arguments.of(description, buildViolations(violations), buildViolations(expectedViolations));
     }
 
-    private static List<DuplicatedInnerPolygonViolation> buildViolations(List<DuplicatedInnerPolygonViolationBuilder> violations) {
+    @Builder(builderMethodName = "testCaseForDuplicatedViolations", builderClassName = "TestCaseForDuplicatedViolations")
+    private static Arguments buildTestCaseForDuplicatedViolations(
+            @NonNull String description,
+            @Singular List<OsmoseViolationBuilder> violations,
+            @Singular List<DuplicatedViolation> expectedViolations) {
+        return Arguments.of(description, buildViolations(violations), expectedViolations);
+    }
+
+    private static List<InnerPolygonOsmoseViolation> buildViolations(List<OsmoseViolationBuilder> violations) {
         return violations
                 .stream()
-                .map(DuplicatedInnerPolygonViolationBuilder::build)
+                .map(OsmoseViolationBuilder::build)
                 .collect(Collectors.toList());
     }
 
-    @Builder(builderMethodName = "duplicatedInnerPolygonViolation", builderClassName = "DuplicatedInnerPolygonViolationBuilder")
-    private static DuplicatedInnerPolygonViolation buildDuplicatedInnerPolygonViolation(
+    @Builder(builderMethodName = "osmoseViolation", builderClassName = "OsmoseViolationBuilder")
+    private static InnerPolygonOsmoseViolation buildInnerPolygonOsmoseViolation(
             int osmoseRuleId,
             @Singular List<Long> relationIds,
             @Singular List<Long> wayIds) {
-        return new DuplicatedInnerPolygonViolation(osmoseRuleId, new ViolatingOsmIds(relationIds, wayIds));
+        return new InnerPolygonOsmoseViolation(osmoseRuleId, new ViolatingOsmIds(relationIds, wayIds));
     }
 
     @BeforeEach
@@ -83,10 +122,20 @@ class DuplicatedViolationFilterTest {
     }
 
     @ParameterizedTest(name = "[{index}] {0}")
-    @MethodSource("getTestCases")
-    void shouldDeduplicateViolations(String description, List<DuplicatedInnerPolygonViolation> violations, List<DuplicatedInnerPolygonViolation> expected) {
+    @MethodSource("getTestCasesForUniqueViolations")
+    void shouldFindUniqueViolations(String description, List<InnerPolygonOsmoseViolation> violations, List<InnerPolygonOsmoseViolation> expected) {
         //  when
-        List<DuplicatedInnerPolygonViolation> actual = duplicatedViolationsFilter.deduplicate(violations);
+        List<InnerPolygonOsmoseViolation> actual = duplicatedViolationsFilter.findUniqueViolations(violations);
+
+        //  then
+        assertThat(actual).containsExactlyInAnyOrderElementsOf(expected);
+    }
+
+    @ParameterizedTest(name = "[{index}] {0}")
+    @MethodSource("getTestCasesForDuplicatedViolations")
+    void shouldFindDuplicatedViolations(String description, List<InnerPolygonOsmoseViolation> violations, List<DuplicatedViolation> expected) {
+        //  when
+        List<DuplicatedViolation> actual = duplicatedViolationsFilter.findDuplicatedViolations(violations);
 
         //  then
         assertThat(actual).containsExactlyInAnyOrderElementsOf(expected);

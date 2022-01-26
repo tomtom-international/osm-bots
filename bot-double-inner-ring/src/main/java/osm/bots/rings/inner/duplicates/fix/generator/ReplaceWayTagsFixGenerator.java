@@ -1,4 +1,4 @@
-package osm.bots.rings.inner.duplicates.osmapi.fix;
+package osm.bots.rings.inner.duplicates.fix.generator;
 
 import de.westnordost.osmapi.map.data.OsmWay;
 import osm.bots.rings.inner.duplicates.osmapi.model.ViolatingOsmData;
@@ -8,15 +8,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class ViolationFixGenerator {
+public class ReplaceWayTagsFixGenerator implements FixGenerator {
 
-    public List<ViolationFix> generateChanges(List<ViolatingOsmData> violatingOsmData) {
-        return violatingOsmData.stream()
-                .map(this::generateChange)
-                .collect(Collectors.toList());
-    }
-
-    private ViolationFix generateChange(ViolatingOsmData violatingOsmData) {
+    @Override
+    public ViolationFix generateFix(ViolatingOsmData violatingOsmData) {
         OsmWay wayToBeDeleted = (OsmWay) violatingOsmData.getDuplicatingWay().getWay();
         OsmWay wayToBeUpdated = (OsmWay) violatingOsmData.getInnerRingWay().getWay();
         Map<String, String> tagsToBeMoved = wayToBeDeleted.getTags();

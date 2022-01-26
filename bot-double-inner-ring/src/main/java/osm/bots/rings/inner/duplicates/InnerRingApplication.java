@@ -5,14 +5,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import osm.bots.rings.inner.duplicates.statistics.StatisticsRepository;
 
 @Slf4j
 @RequiredArgsConstructor
 @SpringBootApplication
 public class InnerRingApplication implements CommandLineRunner {
 
-    private final ViolationsFixer violationsFixer;
-    private final RunParameters runParameters;
+    private final ViolationsProcessor violationsProcessor;
 
     public static void main(String[] args) {
         SpringApplication.run(InnerRingApplication.class, args);
@@ -21,8 +21,7 @@ public class InnerRingApplication implements CommandLineRunner {
     @Override
     public void run(String... args) {
         log.info("Running double inner ring fixer for following arguments {}", args);
-
-        violationsFixer.fixViolations(runParameters.getPathToViolationsFile());
+        violationsProcessor.processViolations();
         log.info("BOT processing has been finished");
     }
 }

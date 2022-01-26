@@ -1,6 +1,8 @@
 package osm.bots.rings.inner.duplicates.utils;
 
+import de.westnordost.osmapi.map.data.Element;
 import de.westnordost.osmapi.map.data.OsmRelation;
+import de.westnordost.osmapi.map.data.OsmRelationMember;
 import de.westnordost.osmapi.map.data.OsmWay;
 import de.westnordost.osmapi.map.data.Relation;
 import de.westnordost.osmapi.map.data.RelationMember;
@@ -11,6 +13,8 @@ import lombok.experimental.UtilityClass;
 import osm.bots.rings.inner.duplicates.osmapi.model.ViolatingOsmData;
 import osm.bots.rings.inner.duplicates.osmapi.model.WayWithParentRelations;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -28,6 +32,7 @@ public class TestFeatureGenerator {
                 .stream()
                 .map(relationId -> relation()
                         .id(relationId)
+                        .members(List.of(new OsmRelationMember(wayId, "inner", Element.Type.WAY)))
                         .build())
                 .collect(Collectors.toList());
         OsmWay wayInViolatingRelation = way()
@@ -38,13 +43,29 @@ public class TestFeatureGenerator {
         return new WayWithParentRelations(wayInViolatingRelation, parentRelations);
     }
 
+    @Builder(builderMethodName = "violatingOsmDataWithRelationMember")
+    public ViolatingOsmData buildViolatingOsmDataWithRelationMember(
+            long relationId,
+            WayWithParentRelations innerRingWay,
+            WayWithParentRelations duplicatingWay
+    ) {
+        List<RelationMember> members = new ArrayList<>();
+        members.add(new OsmRelationMember(innerRingWay.getWay().getId(), "inner", Element.Type.WAY));
+
+        Relation relation = TestFeatureGenerator.relation()
+                .id(relationId)
+                .members(members)
+                .build();
+        return new ViolatingOsmData(relation, innerRingWay, duplicatingWay);
+    }
+
     @Builder(builderMethodName = "relation")
     public static OsmRelation buildRelation(
             long id,
             int version,
             Map<String, String> tags,
-            @Singular("member") List<RelationMember> members) {
-        return new OsmRelation(id, version, getOrDefault(members, List.of()), getOrDefault(tags, Map.of()));
+            List<RelationMember> members) {
+        return new OsmRelation(id, version, getOrDefault(members, new ArrayList<>()), getOrDefault(tags, new HashMap<>()));
     }
 
     @Builder(builderMethodName = "way")
@@ -54,19 +75,6 @@ public class TestFeatureGenerator {
             List<Long> nodes,
             Map<String, String> tags) {
         return new OsmWay(id, version, getOrDefault(nodes, List.of()), getOrDefault(tags, Map.of()));
-    }
-
-    @Builder(builderMethodName = "violatingOsmData")
-    public ViolatingOsmData buildViolatingOsmData(
-            long relationId,
-            WayWithParentRelations innerRingWay,
-            WayWithParentRelations duplicatingWay
-    ) {
-        Relation relation = TestFeatureGenerator.relation()
-                .id(relationId)
-                .build();
-
-        return new ViolatingOsmData(relation, innerRingWay, duplicatingWay);
     }
 
     public static <T> T getOrDefault(T value, T defaultValue) {

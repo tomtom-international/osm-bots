@@ -3,7 +3,7 @@ package osm.bots.rings.inner.duplicates.osmapi.fetch;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import osm.bots.rings.inner.duplicates.osmapi.model.ViolatingOsmData;
-import osm.bots.rings.inner.duplicates.osmose.DuplicatedInnerPolygonViolation;
+import osm.bots.rings.inner.duplicates.osmose.InnerPolygonOsmoseViolation;
 
 import java.util.Optional;
 
@@ -13,7 +13,7 @@ public class FetchClient {
 
     private final OsmDataFetcher osmDataFetcher;
 
-    public Optional<ViolatingOsmData> fetchDataForViolation(DuplicatedInnerPolygonViolation violation) {
+    public Optional<ViolatingOsmData> fetchDataForViolation(InnerPolygonOsmoseViolation violation) {
         OsmData osmData = osmDataFetcher.fetch(violation);
         if (OsmDataCompletenessVerifier.isDataIncomplete(osmData)) {
             log.warn("Incomplete OsmData: {}", osmData);

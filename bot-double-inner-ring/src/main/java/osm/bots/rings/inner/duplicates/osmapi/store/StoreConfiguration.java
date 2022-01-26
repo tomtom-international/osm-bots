@@ -2,32 +2,36 @@ package osm.bots.rings.inner.duplicates.osmapi.store;
 
 import de.westnordost.osmapi.OsmConnection;
 import de.westnordost.osmapi.map.MapDataApi;
-import lombok.RequiredArgsConstructor;
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.basic.DefaultOAuthConsumer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import osm.bots.rings.inner.duplicates.OpenStreetMapApiParameters;
+import osm.bots.rings.inner.duplicates.OpenStreetMapApiParameters.OpenStreetMapApiCredential;
 import osm.bots.rings.inner.duplicates.RunParameters;
+import osm.bots.rings.inner.duplicates.statistics.StatisticsRepository;
+
+import static java.util.Objects.requireNonNull;
 
 @Configuration
-@RequiredArgsConstructor
 class StoreConfiguration {
 
     @Bean
-    OsmFixUploader getChangesetUploader(RunParameters runParameters) {
-        OsmWriteClient osmWriteClient = new OsmWriteClient(getWriteDataApi(
-                runParameters.getToken(),
-                runParameters.getTokenSecret(),
-                runParameters.getConsumerKey(),
-                runParameters.getConsumerSecret(),
-                runParameters.getOpenstreetmapApiUrl()));
-        return new OsmFixUploader(osmWriteClient, runParameters.getOsmDiscussionPage(), runParameters.getOsmWikiDocumentationPage());
+    FixUploader changesetUploader(StatisticsRepository statisticsRepository, RunParameters runParameters) {
+        if (runParameters.isUploadFixes()) {
+            OsmWriteClient osmWriteClient = new OsmWriteClient(writeDataApi(runParameters.getOpenStreetMapApi()));
+            return new OsmApiFixUploader(statisticsRepository, osmWriteClient, runParameters.getOsmDiscussionPage(), runParameters.getOsmWikiDocumentationPage());
+        } else {
+            return new LogOnlyFixUploader(statisticsRepository);
+        }
     }
 
-    private MapDataApi getWriteDataApi(String token, String tokenSecret, String consumerKey, String consumerSecret, String openstreetmapApiUrl) {
-        OAuthConsumer consumer = new DefaultOAuthConsumer(consumerKey, consumerSecret);
-        consumer.setTokenWithSecret(token, tokenSecret);
-        OsmConnection osmConnection = new OsmConnection(openstreetmapApiUrl, "user_agent", consumer);
+    private MapDataApi writeDataApi(OpenStreetMapApiParameters openStreetMapApiParameters) {
+        OpenStreetMapApiCredential credentials =
+                requireNonNull(openStreetMapApiParameters.getCredentials(), "Open Street Map API credentials cannot be null");
+        OAuthConsumer consumer = new DefaultOAuthConsumer(credentials.getConsumerKey(), credentials.getConsumerSecret());
+        consumer.setTokenWithSecret(credentials.getToken(), credentials.getTokenSecret());
+        OsmConnection osmConnection = new OsmConnection(openStreetMapApiParameters.getUrl(), "user_agent", consumer);
         return new MapDataApi(osmConnection);
     }
 }

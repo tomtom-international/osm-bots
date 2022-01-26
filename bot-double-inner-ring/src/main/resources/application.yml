@@ -5,13 +5,16 @@ spring:
 
 run:
   parameters:
+    upload-fixes: false
     osm-discussion-page:
     osm-wiki-documentation-page:
-    openstreetmap-api-url: "https://api.openstreetmap.org/api/0.6/"
-    token: "dummy"
-    token-secret: "dummy"
-    consumer-key: "dummy"
-    consumer-secret: "dummy"
+    open-street-map-api:
+      url: "https://api.openstreetmap.org/api/0.6/"
+      credentials:
+        token: "dummy"
+        tokenSecret: "dummy"
+        consumerKey: "dummy"
+        consumerSecret: "dummy"
     path-to-violations-file:
     max-violations-per-changeset: 50
     verifier:

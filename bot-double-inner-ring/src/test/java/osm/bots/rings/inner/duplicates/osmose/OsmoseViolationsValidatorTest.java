@@ -20,25 +20,25 @@ class OsmoseViolationsValidatorTest {
     @Test
     void shouldFilterOutInvalidViolations() {
         //given
-        DuplicatedInnerPolygonViolation invalidViolationTooManyRelations = new DuplicatedInnerPolygonViolation(
+        InnerPolygonOsmoseViolation invalidViolationTooManyRelations = new InnerPolygonOsmoseViolation(
                 DUPLICATE_RING_RULE_ID,
                 new ViolatingOsmIds(List.of(1L, 2L), List.of(1L, 2L)));
-        DuplicatedInnerPolygonViolation invalidViolationTooManyWays = new DuplicatedInnerPolygonViolation(
+        InnerPolygonOsmoseViolation invalidViolationTooManyWays = new InnerPolygonOsmoseViolation(
                 DUPLICATE_RING_RULE_ID,
                 new ViolatingOsmIds(List.of(1L), List.of(1L, 2L, 3L)));
-        DuplicatedInnerPolygonViolation invalidViolationRuleId = new DuplicatedInnerPolygonViolation(
+        InnerPolygonOsmoseViolation invalidViolationRuleId = new InnerPolygonOsmoseViolation(
                 DIFFERENT_RULE_ID,
                 new ViolatingOsmIds(List.of(1L), List.of(1L, 2L)));
-        DuplicatedInnerPolygonViolation invalidViolationTooFewFeatures = new DuplicatedInnerPolygonViolation(
+        InnerPolygonOsmoseViolation invalidViolationTooFewFeatures = new InnerPolygonOsmoseViolation(
                 DUPLICATE_RING_RULE_ID,
                 new ViolatingOsmIds(List.of(), List.of(1L)));
 
-        DuplicatedInnerPolygonViolation validViolation = new DuplicatedInnerPolygonViolation(
+        InnerPolygonOsmoseViolation validViolation = new InnerPolygonOsmoseViolation(
                 DUPLICATE_RING_RULE_ID,
                 new ViolatingOsmIds(List.of(1L), List.of(1L, 2L)));
 
         //when
-        List<DuplicatedInnerPolygonViolation> actualValidatedViolations = osmoseViolationsValidator.getValidViolations(
+        List<InnerPolygonOsmoseViolation> actualValidatedViolations = osmoseViolationsValidator.getValidViolations(
                 List.of(invalidViolationTooManyRelations,
                         invalidViolationTooManyWays,
                         validViolation,

@@ -3,50 +3,51 @@ package osm.bots.rings.inner.duplicates.verifiers;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import osm.bots.rings.inner.duplicates.statistics.StatisticsRepository;
 
-import java.util.Collection;
+import java.util.List;
 
 @Configuration
 class VerifierConfiguration {
 
     @Bean
-    DataVerifier getDataVerifier(Collection<Verifier> verifiers) {
-        return new DataVerifier(verifiers);
+    DataVerifier dataVerifier(List<Verifier> verifiers, StatisticsRepository statisticsRepository) {
+        return new DataVerifier(verifiers, statisticsRepository);
     }
 
     @Bean
     @ConditionalOnProperty(prefix = "run.parameters.verifier.ways-have-matching-nodes", name = "active")
-    WaysHaveMatchingNodesVerifier getWaysHaveMatchingNodesVerifier() {
+    WaysHaveMatchingNodesVerifier waysHaveMatchingNodesVerifier() {
         return new WaysHaveMatchingNodesVerifier();
     }
 
     @Bean
     @ConditionalOnProperty(prefix = "run.parameters.verifier.duplicating-way-has-tags", name = "active")
-    DuplicatingWayHasTagsVerifier getDuplicatingWayHasTagsVerifier() {
+    DuplicatingWayHasTagsVerifier duplicatingWayHasTagsVerifier() {
         return new DuplicatingWayHasTagsVerifier();
     }
 
     @Bean
     @ConditionalOnProperty(prefix = "run.parameters.verifier.duplicating-way-is-not-member-of-any-relation", name = "active")
-    DuplicatingWayIsNotMemberOfAnyRelationVerifier getDuplicatingWayIsNotMemberOfAnyRelationVerifier() {
+    DuplicatingWayIsNotMemberOfAnyRelationVerifier duplicatingWayIsNotMemberOfAnyRelationVerifier() {
         return new DuplicatingWayIsNotMemberOfAnyRelationVerifier();
     }
 
     @Bean
     @ConditionalOnProperty(prefix = "run.parameters.verifier.inner-ring-way-has-no-tags", name = "active")
-    InnerRingWayHasNoTagsVerifier getInnerRingWayHasNoTagsVerifier() {
+    InnerRingWayHasNoTagsVerifier innerRingWayHasNoTagsVerifier() {
         return new InnerRingWayHasNoTagsVerifier();
     }
 
     @Bean
     @ConditionalOnProperty(prefix = "run.parameters.verifier.inner-ring-way-is-only-member-of-violating-relation", name = "active")
-    InnerRingWayIsOnlyMemberOfViolatingRelationVerifier getInnerRingWayIsOnlyMemberOfViolatingRelationVerifier() {
+    InnerRingWayIsOnlyMemberOfViolatingRelationVerifier innerRingWayIsOnlyMemberOfViolatingRelationVerifier() {
         return new InnerRingWayIsOnlyMemberOfViolatingRelationVerifier();
     }
 
     @Bean
     @ConditionalOnProperty(prefix = "run.parameters.verifier.source", name = "active")
-    SourceVerifier getSourceVerifier(SourceVerifierParameters parameters) {
+    SourceVerifier sourceVerifier(SourceVerifierParameters parameters) {
         return new SourceVerifier(parameters.getTagValues());
     }
 }
