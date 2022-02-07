@@ -1,7 +1,8 @@
 package osm.bots.rings.inner.duplicates.osmapi.store;
 
-import java.util.List;
 import osm.bots.rings.inner.duplicates.osmapi.model.ViolationFix;
+
+import java.util.List;
 
 public interface FixUploader {
 

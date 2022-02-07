@@ -8,6 +8,7 @@ import osm.bots.rings.inner.duplicates.osmapi.model.WayWithParentRelations;
 import osm.bots.rings.inner.duplicates.osmapi.store.FixUploader;
 import osm.bots.rings.inner.duplicates.osmose.DuplicatedViolation;
 import osm.bots.rings.inner.duplicates.osmose.OsmoseViolations;
+import osm.bots.rings.inner.duplicates.statistics.StatisticsRepository;
 import osm.bots.rings.inner.duplicates.verifiers.DataVerifier;
 
 import java.util.Collection;
@@ -19,10 +20,12 @@ import java.util.stream.Collectors;
 public class DuplicatedViolationsFixer extends ViolationsFixer {
 
     private final DataVerifier dataVerifier;
+    private final StatisticsRepository statisticsRepository;
 
-    DuplicatedViolationsFixer(FetchClient fetchClient, ReplaceRelationMemberFixGenerator fixGenerator, FixUploader fixUploader, DataVerifier dataVerifier) {
+    DuplicatedViolationsFixer(FetchClient fetchClient, ReplaceRelationMemberFixGenerator fixGenerator, FixUploader fixUploader, DataVerifier dataVerifier, StatisticsRepository statisticsRepository) {
         super(fixGenerator, fixUploader, fetchClient);
         this.dataVerifier = dataVerifier;
+        this.statisticsRepository = statisticsRepository;
     }
 
     @Override
@@ -38,6 +41,7 @@ public class DuplicatedViolationsFixer extends ViolationsFixer {
         List<ViolatingOsmData> violatingDataForUpload = validDuplicatedViolations.stream()
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
+        statisticsRepository.addDuplicatedViolationPassedFilters(violatingDataForUpload.size());
         generateAndUploadFix(violatingDataForUpload);
     }
 

@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import osm.bots.rings.inner.duplicates.fix.Partitions;
 import osm.bots.rings.inner.duplicates.statistics.StatisticsRepository;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public class OsmoseViolationsFetcher {
@@ -36,8 +38,10 @@ public class OsmoseViolationsFetcher {
     private Partitions<DuplicatedViolation> getDuplicatedViolationsPartitions(List<InnerPolygonOsmoseViolation> validViolations) {
         List<DuplicatedViolation> duplicatedViolations = duplicatedViolationsFilter.findDuplicatedViolations(validViolations);
         long allDuplicatedViolationsCount = duplicatedViolations.stream()
-                .mapToLong(s -> s.getViolations().size())
-                .sum();
+                .map(DuplicatedViolation::getViolations)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toSet())
+                .size();
         statisticsRepository.setDuplicatedReadViolations(allDuplicatedViolationsCount);
         return partitionCreator.createPartitions(duplicatedViolations, maxViolationsPerPartition);
     }

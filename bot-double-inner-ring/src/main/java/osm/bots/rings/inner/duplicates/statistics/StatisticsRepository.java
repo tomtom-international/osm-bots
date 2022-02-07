@@ -19,6 +19,8 @@ public class StatisticsRepository {
     private final AtomicLong allReadViolations = new AtomicLong(0);
     private final AtomicLong uniqueReadViolations = new AtomicLong(0);
     private final AtomicLong duplicatedReadViolations = new AtomicLong(0);
+    private final AtomicLong uniqueViolationsPassedFilters = new AtomicLong(0);
+    private final AtomicLong duplicatedViolationsPassedFilters = new AtomicLong(0);
     private final AtomicLong uploadedViolations = new AtomicLong(0);
     private final AtomicLong osmUploadedConflicts = new AtomicLong(0);
     private final AtomicLong openedChangesets = new AtomicLong(0);
@@ -44,6 +46,14 @@ public class StatisticsRepository {
         this.duplicatedReadViolations.set(count);
     }
 
+    public void addUniqueViolationPassedFilters(long count) {
+        this.uniqueViolationsPassedFilters.addAndGet(count);
+    }
+
+    public void addDuplicatedViolationPassedFilters(long count) {
+        this.duplicatedViolationsPassedFilters.addAndGet(count);
+    }
+
     public void addUploadedViolations(long count) {
         this.uploadedViolations.addAndGet(count);
     }
@@ -61,18 +71,22 @@ public class StatisticsRepository {
     }
 
     public void printRunSummary() {
+        log.info("====================================================");
         log.info("Inner Ring Bot summary:");
         log.info("Processing started at: {}", convertTime(applicationStartTime.get()));
         log.info("Processing finished at: {}", convertTime(applicationStopTime.get()));
         log.info("Process duration: {} [min]", calculateProcessDuration());
         log.info("Count of all violations read from file: {}", allReadViolations.get());
         log.info("Count of unique violations read from file: {}", uniqueReadViolations.get());
+        log.info("Count of unique violations passed throughout filters: {}", uniqueViolationsPassedFilters.get());
+        log.info("Count of duplicated violations passed throughout filters: {}", duplicatedViolationsPassedFilters.get());
         log.info("Count of duplicated violations read from file: {}", duplicatedReadViolations.get());
         log.info("Count of violations rejected by verifiers: {}", rejectedByVerifiers.get());
         log.info("Count of opened changesets: {}", openedChangesets.get());
         log.info("Count of violation fixes uploaded to OSM: {}", uploadedViolations.get());
         log.info("Count of conflicted violation fixes: {}", osmUploadedConflicts.get());
         log.info("Count of not fixed violations: {}", allReadViolations.get() - uploadedViolations.get());
+        log.info("====================================================");
     }
 
     private String convertTime(long time) {

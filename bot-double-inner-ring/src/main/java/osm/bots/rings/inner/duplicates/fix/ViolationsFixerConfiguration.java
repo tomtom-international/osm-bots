@@ -6,6 +6,7 @@ import osm.bots.rings.inner.duplicates.fix.generator.ReplaceRelationMemberFixGen
 import osm.bots.rings.inner.duplicates.fix.generator.ReplaceWayTagsFixGenerator;
 import osm.bots.rings.inner.duplicates.osmapi.fetch.FetchClient;
 import osm.bots.rings.inner.duplicates.osmapi.store.FixUploader;
+import osm.bots.rings.inner.duplicates.statistics.StatisticsRepository;
 import osm.bots.rings.inner.duplicates.verifiers.DataVerifier;
 
 @Configuration
@@ -16,8 +17,9 @@ class ViolationsFixerConfiguration {
             FetchClient fetchClient,
             DataVerifier dataVerifier,
             ReplaceRelationMemberFixGenerator replaceRelationMemberFixGenerator,
-            FixUploader fixUploader) {
-        return new DuplicatedViolationsFixer(fetchClient, replaceRelationMemberFixGenerator, fixUploader, dataVerifier);
+            FixUploader fixUploader,
+            StatisticsRepository statisticsRepository) {
+        return new DuplicatedViolationsFixer(fetchClient, replaceRelationMemberFixGenerator, fixUploader, dataVerifier, statisticsRepository);
     }
 
     @Bean
@@ -25,7 +27,8 @@ class ViolationsFixerConfiguration {
             FetchClient fetchClient,
             DataVerifier dataVerifier,
             ReplaceWayTagsFixGenerator replaceWayTagsFixGenerator,
-            FixUploader fixUploader) {
-        return new UniqueViolationsFixer(fetchClient, replaceWayTagsFixGenerator, fixUploader, dataVerifier);
+            FixUploader fixUploader,
+            StatisticsRepository statisticsRepository) {
+        return new UniqueViolationsFixer(fetchClient, replaceWayTagsFixGenerator, fixUploader, dataVerifier, statisticsRepository);
     }
 }

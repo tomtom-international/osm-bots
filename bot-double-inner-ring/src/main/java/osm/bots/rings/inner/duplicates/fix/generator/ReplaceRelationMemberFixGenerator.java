@@ -11,7 +11,6 @@ import osm.bots.rings.inner.duplicates.osmapi.model.ViolationFix;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 public class ReplaceRelationMemberFixGenerator implements FixGenerator {
 
