@@ -117,7 +117,7 @@ Following run parameters are optional, but it is not recommended, to change thei
 >   --run.parameters.verifier.inner-ring-way-is-only-member-of-violating-relation.active=true
 
 * The `verifier.source.active` informs BOT, if it should include source tag into violations filtering procedure (default value is false).
->   --run.parameters.source.verifier.active=false
+>   --run.parameters.verifier.source.active=false
 
 * The `verifier.source.tag-values` informs BOT, what values of source tag should be accepted as valid violations. Values are provided as array elements. Please notice that for each country these values vary, so before run please verify them.
->   --run.parameters.source.tag-values`=["NRCan-CanVec-10.0","NRCan-CanVec-11.0"]
+>   --run.parameters.verifier.source.tag-values`=["NRCan-CanVec-10.0","NRCan-CanVec-11.0"]

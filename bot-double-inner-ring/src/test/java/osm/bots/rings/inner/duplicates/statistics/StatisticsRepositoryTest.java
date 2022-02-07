@@ -21,7 +21,9 @@ class StatisticsRepositoryTest {
                 .returns(0L, results -> results.getApplicationStopTime().get())
                 .returns(0L, results -> results.getAllReadViolations().get())
                 .returns(0L, results -> results.getUniqueReadViolations().get())
+                .returns(0L, results -> results.getUniqueViolationsPassedFilters().get())
                 .returns(0L, results -> results.getDuplicatedReadViolations().get())
+                .returns(0L, results -> results.getDuplicatedViolationsPassedFilters().get())
                 .returns(0L, results -> results.getRejectedByVerifiers().get())
                 .returns(0L, results -> results.getOpenedChangesets().get())
                 .returns(0L, results -> results.getUploadedViolations().get())
@@ -77,6 +79,17 @@ class StatisticsRepositoryTest {
     }
 
     @Test
+    void shouldAddUniqueViolationPassedFilters() {
+        //  when
+        statisticsRepository.addUniqueViolationPassedFilters(2);
+        statisticsRepository.addUniqueViolationPassedFilters(1);
+
+        //  then
+        assertThat(statisticsRepository.getUniqueViolationsPassedFilters().get())
+                .isEqualTo(3);
+    }
+
+    @Test
     void shouldAddDuplicatedReadViolations() {
         //  when
         statisticsRepository.setDuplicatedReadViolations(1);
@@ -85,6 +98,17 @@ class StatisticsRepositoryTest {
         //  then
         assertThat(statisticsRepository.getDuplicatedReadViolations().get())
                 .isEqualTo(2);
+    }
+
+    @Test
+    void shouldAddDuplicatedViolationPassedFilters() {
+        //  when
+        statisticsRepository.addDuplicatedViolationPassedFilters(1);
+        statisticsRepository.addDuplicatedViolationPassedFilters(2);
+
+        //  then
+        assertThat(statisticsRepository.getDuplicatedViolationsPassedFilters().get())
+                .isEqualTo(3);
     }
 
     @Test

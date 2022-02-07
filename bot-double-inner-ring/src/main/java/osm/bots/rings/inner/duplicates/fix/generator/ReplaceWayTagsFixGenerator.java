@@ -6,7 +6,6 @@ import osm.bots.rings.inner.duplicates.osmapi.model.ViolationFix;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class ReplaceWayTagsFixGenerator implements FixGenerator {
 

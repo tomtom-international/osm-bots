@@ -6,7 +6,6 @@ import de.westnordost.osmapi.map.data.OsmRelationMember;
 import de.westnordost.osmapi.map.data.OsmWay;
 import de.westnordost.osmapi.map.data.Relation;
 import de.westnordost.osmapi.map.data.RelationMember;
-import de.westnordost.osmapi.map.data.Way;
 import lombok.Builder;
 import lombok.Singular;
 import lombok.experimental.UtilityClass;
