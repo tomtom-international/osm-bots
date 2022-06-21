@@ -34,6 +34,12 @@ class VerifierConfiguration {
     }
 
     @Bean
+    @ConditionalOnProperty(prefix = "run.parameters.verifier.duplicating-way-is-not-reverted-coastline", name = "active")
+    DuplicatingWayIsNotRevertedCoastLineVerifier duplicatingWayIsNotRevertedCoastLine() {
+        return new DuplicatingWayIsNotRevertedCoastLineVerifier();
+    }
+
+    @Bean
     @ConditionalOnProperty(prefix = "run.parameters.verifier.inner-ring-way-has-no-tags", name = "active")
     InnerRingWayHasNoTagsVerifier innerRingWayHasNoTagsVerifier() {
         return new InnerRingWayHasNoTagsVerifier();
