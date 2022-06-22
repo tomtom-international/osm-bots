@@ -26,6 +26,7 @@ Following checks are executed:
 * both ways are closed and have the same nodes (direction of way digitization and starting node can be different),
 * duplicating way should have tags,
 * duplicating way is not member of any relation,
+* duplicating way is not a coast-line with reversed geometry,
 * inner ring way should have no tags,
 * inner ring way is member of only 1 relation (the one from Osmose violation),
 * optional: relation and duplicating way should have required "source" tag (e.g. "source=CanVec 8.0 - NRCan).
@@ -108,6 +109,10 @@ Following run parameters are optional, but it is not recommended, to change thei
 * The `verifier.duplicating-way-is-not-member-of-any-relation.active` informs BOT, if it should verify that duplicating way is not a member of any relation 
   (default value is true).
 >   --run.parameters.verifier.duplicating-way-is-not-member-of-any-relation.active=true
+
+* The `verifier.duplicating-way-is-not-reverted-coastline.active` informs BOT, if it should verify that duplicating way is not a coast-line with geometry 
+  other than inner ring way (default value is true).
+>   --run.parameters.verifier.duplicating-way-is-not-reverted-coastline.active=true
 
 * The `verifier.inner-ring-way-has-no-tags.active` informs BOT, if it should verify that inner ring way has not tags (default value is true).
 >   --run.parameters.verifier.inner-ring-way-has-no-tags.active=true
